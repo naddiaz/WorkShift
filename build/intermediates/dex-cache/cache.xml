@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="/home/nad/AndroidStudioProjects/WorkShift/app/build/intermediates/exploded-aar/com.github.clans/fab/1.5.0/classes.jar"
+        jumboMode="false"
+        revision="22.0.0"
+        sha1="daa2783c5e148426f8333ff0cc34389527584520">
+        <dex dex="/home/nad/AndroidStudioProjects/WorkShift/app/build/intermediates/pre-dexed/debug/classes-7b93be0b9c3ac0528970488f007b4e2f01a1bbfa.jar" />
+    </item>
+    <item
+        jar="/home/nad/.gradle/caches/modules-2/files-2.1/com.j256.ormlite/ormlite-core/4.48/e579bd2905d0399af5029aaaf9817d5fa0ca88a5/ormlite-core-4.48.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="e579bd2905d0399af5029aaaf9817d5fa0ca88a5">
+        <dex dex="/home/nad/AndroidStudioProjects/WorkShift/app/build/intermediates/pre-dexed/debug/ormlite-core-4.48-ec858313e213a22767ff59867c9c5c02e3f1d59b.jar" />
+    </item>
+    <item
+        jar="/home/nad/AndroidStudioProjects/WorkShift/app/build/intermediates/exploded-aar/com.prolificinteractive/material-calendarview/0.4.0/classes.jar"
+        jumboMode="false"
+        revision="22.0.0"
+        sha1="b20ee2f48924414e04e4087a8fa7a45043f11e0c">
+        <dex dex="/home/nad/AndroidStudioProjects/WorkShift/app/build/intermediates/pre-dexed/debug/classes-697ab380fde181461d3a19a28b65a653a0862a4c.jar" />
+    </item>
+    <item
+        jar="/home/nad/AndroidStudioProjects/WorkShift/app/build/intermediates/exploded-aar/com.github.johnkil.android-appmsg/appmsg/1.2.0/classes.jar"
+        jumboMode="false"
+        revision="22.0.0"
+        sha1="398ec51345409df9e36a1de1a81f2b3ad5234bfb">
+        <dex dex="/home/nad/AndroidStudioProjects/WorkShift/app/build/intermediates/pre-dexed/debug/classes-79c3a92f4f2bdd6f93666d849b6698a934574a68.jar" />
+    </item>
+    <item
+        jar="/home/nad/AndroidStudioProjects/WorkShift/app/build/intermediates/exploded-aar/com.heinrichreimersoftware.materialdrawer/library/1.4.2/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="728080bff87f3043d07851290292c17ac6cb9548">
+        <dex dex="/home/nad/AndroidStudioProjects/WorkShift/app/build/intermediates/pre-dexed/debug/classes-ace5ff93863a9f02a9d396d27763c83b58eb1392.jar" />
+    </item>
+    <item
+        jar="/home/nad/AndroidStudioProjects/WorkShift/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/22.1.1/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="e0b0c35d02308b270015a74cada4887e2e49b889">
+        <dex dex="/home/nad/AndroidStudioProjects/WorkShift/app/build/intermediates/pre-dexed/debug/classes-a299adce9ad676e46a9a4e7543b2c292a1198c38.jar" />
+    </item>
+    <item
+        jar="/home/nad/AndroidStudioProjects/WorkShift/app/build/intermediates/exploded-aar/com.github.satyan/sugar/1.3/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="07e07903922250dabf50c7d131d6fa069a050305">
+        <dex dex="/home/nad/AndroidStudioProjects/WorkShift/app/build/intermediates/pre-dexed/debug/classes-01ca492fab41660af291dee6c3639f412fe29db5.jar" />
+    </item>
+    <item
+        jar="/home/nad/Android/Sdk/extras/android/m2repository/com/android/support/support-annotations/22.1.1/support-annotations-22.1.1.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="01d051a6bfb1218b1db2d3a5af0480ac2c25c42a">
+        <dex dex="/home/nad/AndroidStudioProjects/WorkShift/app/build/intermediates/pre-dexed/debug/support-annotations-22.1.1-f22e13db1d438661f6152d554b6497eb4aab7671.jar" />
+    </item>
+    <item
+        jar="/home/nad/.gradle/caches/modules-2/files-2.1/com.j256.ormlite/ormlite-android/4.48/afa06f539a4026c10b247386312aa67404b80a16/ormlite-android-4.48.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="afa06f539a4026c10b247386312aa67404b80a16">
+        <dex dex="/home/nad/AndroidStudioProjects/WorkShift/app/build/intermediates/pre-dexed/debug/ormlite-android-4.48-8b34f2b5ab53f027881528f3edcc72ad146f6952.jar" />
+    </item>
+    <item
+        jar="/home/nad/AndroidStudioProjects/WorkShift/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.1.1/libs/internal_impl-22.1.1.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="9e070ad32b2700b0343e8e0cccc437733d91ba3a">
+        <dex dex="/home/nad/AndroidStudioProjects/WorkShift/app/build/intermediates/pre-dexed/debug/internal_impl-22.1.1-ee39f7ab76f3b30f1810dda489f53c810d743798.jar" />
+    </item>
+    <item
+        jar="/home/nad/AndroidStudioProjects/WorkShift/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.1.1/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="c95ba8152923e4872e86a82cfcba9a51c0214328">
+        <dex dex="/home/nad/AndroidStudioProjects/WorkShift/app/build/intermediates/pre-dexed/debug/classes-b3cc557bdebb1bd4b82626fdad69a4578daa5ade.jar" />
+    </item>
+    <item
+        jar="/home/nad/AndroidStudioProjects/WorkShift/app/build/intermediates/exploded-aar/com.heinrichreimersoftware.materialdrawer/library/1.4.2/classes.jar"
+        jumboMode="false"
+        revision="22.0.0"
+        sha1="728080bff87f3043d07851290292c17ac6cb9548">
+        <dex dex="/home/nad/AndroidStudioProjects/WorkShift/app/build/intermediates/pre-dexed/debug/classes-ace5ff93863a9f02a9d396d27763c83b58eb1392.jar" />
+    </item>
+    <item
+        jar="/home/nad/AndroidStudioProjects/WorkShift/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.1.1/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="a3ff3c506644c820eb2bdf06e8339f72be578551">
+        <dex dex="/home/nad/AndroidStudioProjects/WorkShift/app/build/intermediates/pre-dexed/debug/classes-0797ac27e1beae57c20bd0bd2676f1eec08d1692.jar" />
+    </item>
+    <item
+        jar="/home/nad/AndroidStudioProjects/WorkShift/app/build/intermediates/exploded-aar/com.afollestad/material-dialogs/0.7.4.2/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="788f653fd773f3d94e4b6cc050211d250f3155a0">
+        <dex dex="/home/nad/AndroidStudioProjects/WorkShift/app/build/intermediates/pre-dexed/debug/classes-fbf03cb353b1e3334b0dc3a5fa515631012e0678.jar" />
+    </item>
+    <item
+        jar="/home/nad/AndroidStudioProjects/WorkShift/app/build/intermediates/exploded-aar/com.github.clans/fab/1.5.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="daa2783c5e148426f8333ff0cc34389527584520">
+        <dex dex="/home/nad/AndroidStudioProjects/WorkShift/app/build/intermediates/pre-dexed/debug/classes-7b93be0b9c3ac0528970488f007b4e2f01a1bbfa.jar" />
+    </item>
+    <item
+        jar="/home/nad/AndroidStudioProjects/WorkShift/app/build/intermediates/exploded-aar/com.github.johnkil.android-appmsg/appmsg/1.2.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="398ec51345409df9e36a1de1a81f2b3ad5234bfb">
+        <dex dex="/home/nad/AndroidStudioProjects/WorkShift/app/build/intermediates/pre-dexed/debug/classes-79c3a92f4f2bdd6f93666d849b6698a934574a68.jar" />
+    </item>
+    <item
+        jar="/home/nad/AndroidStudioProjects/WorkShift/app/build/intermediates/exploded-aar/com.github.satyan/sugar/1.3/classes.jar"
+        jumboMode="false"
+        revision="22.0.0"
+        sha1="07e07903922250dabf50c7d131d6fa069a050305">
+        <dex dex="/home/nad/AndroidStudioProjects/WorkShift/app/build/intermediates/pre-dexed/debug/classes-01ca492fab41660af291dee6c3639f412fe29db5.jar" />
+    </item>
+    <item
+        jar="/home/nad/AndroidStudioProjects/WorkShift/app/build/intermediates/exploded-aar/com.prolificinteractive/material-calendarview/0.4.0/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="b20ee2f48924414e04e4087a8fa7a45043f11e0c">
+        <dex dex="/home/nad/AndroidStudioProjects/WorkShift/app/build/intermediates/pre-dexed/debug/classes-697ab380fde181461d3a19a28b65a653a0862a4c.jar" />
+    </item>
+
+</items>
