@@ -1,27 +1,22 @@
 package com.naddiaz.workshift.ui.fragment;
 
-import android.app.Activity;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StrikethroughSpan;
-import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CalendarView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.naddiaz.workshift.R;
 import com.naddiaz.workshift.ui.adapter.DetailListAdapter;
+import com.naddiaz.workshift.ui.dialog.CalendarDialog;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.DayViewDecorator;
 import com.prolificinteractive.materialcalendarview.DayViewFacade;
@@ -35,9 +30,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 
-import model.DetailItem;
+import com.naddiaz.workshift.ui.adapter.DetailItem;
 
 
 public class CalendarFragment extends Fragment implements OnDateChangedListener, OnMonthChangedListener {
@@ -76,6 +70,7 @@ public class CalendarFragment extends Fragment implements OnDateChangedListener,
             }
         });
         floatingActionMenu = (FloatingActionMenu) rootView.findViewById(R.id.fam_options);
+        defineFloatingButtonActions(rootView);
         calendarView = (MaterialCalendarView) rootView.findViewById(R.id.calendarView);
         textViewDateBox = (TextView) rootView.findViewById(R.id.tv_date_box);
         listViewDetail = (ListView) rootView.findViewById(R.id.listView_detailTurn);
@@ -208,4 +203,35 @@ public class CalendarFragment extends Fragment implements OnDateChangedListener,
             });
         }
     }
+
+    private void defineFloatingButtonActions(View rootView){
+
+        FloatingActionButton fab_define_turns = (FloatingActionButton) rootView.findViewById(R.id.fab_change_turn);
+
+        fab_define_turns.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                floatingActionMenu.close(true);
+                new CalendarDialog(getActivity()).showChangeTurnDialog();
+            }
+        });
+
+        FloatingActionButton fab_enter_month = (FloatingActionButton) rootView.findViewById(R.id.fab_add_turn);
+
+        fab_enter_month.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                floatingActionMenu.close(true);
+            }
+        });
+
+        FloatingActionButton fab_discard_interval = (FloatingActionButton) rootView.findViewById(R.id.fab_add_comment);
+        fab_discard_interval.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                floatingActionMenu.close(true);
+            }
+        });
+    }
+
 }

@@ -12,8 +12,6 @@ import com.naddiaz.workshift.R;
 
 import java.util.ArrayList;
 
-import model.DetailItem;
-
 /**
  * Created by NESTOR on 20/06/2015.
  */

@@ -1,4 +1,4 @@
-package model;
+package com.naddiaz.workshift.ui.adapter;
 
 import com.naddiaz.workshift.R;
 
