@@ -4,12 +4,14 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Toast;
 
 import com.naddiaz.workshift.R;
 import com.naddiaz.workshift.ui.fragment.CalendarFragment;
+import com.naddiaz.workshift.ui.fragment.MonthAddFragment;
 
 import br.liveo.Model.HelpLiveo;
 import br.liveo.interfaces.OnItemClickListener;
@@ -52,6 +54,9 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
         Fragment mFragment;
         FragmentManager mFragmentManager = getSupportFragmentManager();
         switch (position){
+            case 3:
+                mFragment = MonthAddFragment.newInstance(mHelpLiveo.get(position).getName());
+                break;
             default:
                 mFragment = CalendarFragment.newInstance(mHelpLiveo.get(position).getName());
                 break;

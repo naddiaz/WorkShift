@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/action_save"
+        android:title="@string/add_turns_save"
+        android:icon="@drawable/ic_action_save"
+        android:orderInCategory="100" app:showAsAction="always" />
+
+    <item android:id="@+id/action_help"
+        android:title="@string/add_turns_help"
+        android:icon="@drawable/ic_action_help"
+        android:orderInCategory="100" app:showAsAction="always" />
+</menu>

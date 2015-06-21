@@ -19,7 +19,7 @@
             android:layout_height="match_parent"
             app:mcv_showOtherDates="false"
             app:mcv_arrowColor="@color/md_white"
-            app:mcv_selectionColor="@color/transparent_grey"
+            app:mcv_selectionColor="@color/md_grey_500"
             app:mcv_headerTextAppearance="?android:attr/textAppearanceMedium"
             app:mcv_dateTextAppearance="@style/CustomDayTextAppearance"
             app:mcv_weekDayTextAppearance="?android:attr/textAppearanceMedium"
@@ -29,6 +29,16 @@
             app:mcv_firstDayOfWeek="monday" />
 
     </RelativeLayout>
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/loadData"
+        android:id="@+id/textView_loadData"
+        android:layout_alignBottom="@+id/top_container"
+        android:padding="10dp"
+        android:gravity="center_vertical|center_horizontal"
+        android:visibility="gone" />
 
     <LinearLayout
         android:orientation="vertical"

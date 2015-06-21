@@ -2,19 +2,33 @@ package com.naddiaz.workshift.ui.dialog;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.CalendarView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.naddiaz.workshift.R;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
+
+import model.helpers.DatabaseHelper;
+import model.helpers.TurnConfigurationHelper;
+import model.helpers.TurnHelper;
 
 /**
  * Created by NESTOR on 20/06/2015.
  */
 public class CalendarDialog {
     Context context;
+    MaterialCalendarView calendarView;
 
-    public CalendarDialog(Context context) {
+    public static DatabaseHelper databaseHelper;
+    public static TurnHelper turnHelper;
+
+    public CalendarDialog(Context context,MaterialCalendarView calendarView) {
         this.context = context;
+        this.calendarView = calendarView;
+        databaseHelper = new DatabaseHelper(context);
+        turnHelper = new TurnHelper(databaseHelper);
     }
 
     public void showChangeTurnDialog() {
@@ -27,11 +41,11 @@ public class CalendarDialog {
                 @Override
                 public void onPositive(MaterialDialog dialog) {
                     Log.i("DIALOG", "onPositive");
+
                 }
 
                 @Override
                 public void onNegative(MaterialDialog dialog) {
-                    Log.i("DIALOG", "onNegative");
                 }
             }).build();
         dialog.show();

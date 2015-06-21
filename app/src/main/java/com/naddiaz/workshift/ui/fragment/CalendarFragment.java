@@ -1,5 +1,6 @@
 package com.naddiaz.workshift.ui.fragment;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.style.ForegroundColorSpan;
@@ -15,7 +16,9 @@ import android.widget.TextView;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.naddiaz.workshift.R;
+import com.naddiaz.workshift.ui.adapter.DetailItem;
 import com.naddiaz.workshift.ui.adapter.DetailListAdapter;
+import com.naddiaz.workshift.ui.decorators.Decorator;
 import com.naddiaz.workshift.ui.dialog.CalendarDialog;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.DayViewDecorator;
@@ -24,14 +27,22 @@ import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateChangedListener;
 import com.prolificinteractive.materialcalendarview.OnMonthChangedListener;
 
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.Executors;
 
-import com.naddiaz.workshift.ui.adapter.DetailItem;
+import model.Turn;
+import model.TurnConfiguration;
+import model.helpers.DatabaseHelper;
+import model.helpers.TurnConfigurationHelper;
+import model.helpers.TurnHelper;
 
 
 public class CalendarFragment extends Fragment implements OnDateChangedListener, OnMonthChangedListener {
@@ -49,6 +60,11 @@ public class CalendarFragment extends Fragment implements OnDateChangedListener,
     MaterialCalendarView calendarView;
     TextView textViewDateBox;
     ListView listViewDetail;
+    TextView textViewLoadData;
+
+    public static DatabaseHelper databaseHelper;
+    public static TurnConfigurationHelper turnConfigurationHelper;
+    public static TurnHelper turnHelper;
 
     public static CalendarFragment newInstance(String text){
         CalendarFragment mFragment = new CalendarFragment();
@@ -69,6 +85,7 @@ public class CalendarFragment extends Fragment implements OnDateChangedListener,
                 floatingActionMenu.close(true);
             }
         });
+        textViewLoadData = (TextView) rootView.findViewById(R.id.textView_loadData);
         floatingActionMenu = (FloatingActionMenu) rootView.findViewById(R.id.fam_options);
         defineFloatingButtonActions(rootView);
         calendarView = (MaterialCalendarView) rootView.findViewById(R.id.calendarView);
@@ -131,6 +148,7 @@ public class CalendarFragment extends Fragment implements OnDateChangedListener,
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        Log.i(CALENDAR_FRAGMENT,"onActivityCreated");
     }
 
     @Override
@@ -198,9 +216,98 @@ public class CalendarFragment extends Fragment implements OnDateChangedListener,
                 @Override
                 public void decorate(DayViewFacade dayViewFacade) {
                     dayViewFacade.addSpan(new StrikethroughSpan());
-                    dayViewFacade.addSpan(new ForegroundColorSpan(getResources().getColor(R.color.md_grey_400)));
+                    dayViewFacade.addSpan(new ForegroundColorSpan(getResources().getColor(R.color.md_grey_200)));
                 }
             });
+            new BackgroundDecorator(calendarView.getCurrentDate().getYear(),calendarView.getCurrentDate().getMonth())
+                    .executeOnExecutor(Executors.newSingleThreadExecutor());
+        }
+    }
+
+    private class BackgroundDecorator extends AsyncTask<Void, Void, HashMap<Integer, ArrayList<Date>>> {
+
+        private int month;
+        private int year;
+        private ArrayList<TurnConfiguration> turnConfigurations;
+
+        public BackgroundDecorator(int year, int month) {
+            this.month = month + 1;
+            this.year = year;
+            databaseHelper = new DatabaseHelper(getActivity());
+            turnConfigurationHelper = new TurnConfigurationHelper(databaseHelper);
+            turnHelper = new TurnHelper(databaseHelper);
+        }
+
+        @Override
+        protected HashMap<Integer, ArrayList<Date>> doInBackground(Void... voids) {
+            ArrayList<Turn> turns = null;
+            HashMap<Integer, ArrayList<Date>> turnHashMap = new HashMap<>();
+            try {
+                turns = (ArrayList<Turn>) turnHelper.getTurnDAO()
+                        .queryBuilder()
+                        .where()
+                        .eq(Turn.MONTH,month)
+                        .and()
+                        .eq(Turn.YEAR,year)
+                        .query();
+                this.turnConfigurations = (ArrayList<TurnConfiguration>) turnConfigurationHelper.getTurnConfigurationDAO()
+                        .queryBuilder()
+                        .orderBy(Turn.TURN,true)
+                        .query();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            if(this.turnConfigurations.isEmpty()){
+                try {
+                    turnConfigurationHelper.loadDefaultConfiguration();
+                    this.turnConfigurations = (ArrayList<TurnConfiguration>) turnConfigurationHelper.getTurnConfigurationDAO()
+                            .queryBuilder()
+                            .orderBy(Turn.TURN,true)
+                            .query();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            for(int i=0; i<Turn.TURN_TYPES; i++) {
+                ArrayList<Date> tmp = new ArrayList<>();
+                for (Turn turn : turns) {
+                    if(turn.getTurn() == i){
+                        DateFormat format = new SimpleDateFormat("yyyy.MM.dd");
+                        Date date = null;
+                        try {
+                            date = format.parse(turn.getDate());
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        if(date != null) {
+                            tmp.add(date);
+                        }
+                    }
+                }
+                turnHashMap.put(Integer.valueOf(i),tmp);
+            }
+            return turnHashMap;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            textViewLoadData.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected void onPostExecute(HashMap<Integer, ArrayList<Date>> turnHashMap) {
+            super.onPostExecute(turnHashMap);
+            for(Map.Entry<Integer,ArrayList<Date>> entry : turnHashMap.entrySet()){
+                Log.i(CALENDAR_FRAGMENT,entry.getKey() + " ---> " + entry.getValue().toString());
+                TurnConfiguration config = this.turnConfigurations.get(entry.getKey());
+                calendarView.addDecorator(new Decorator(entry.getValue()).generateBackgroundDrawable(config.getColorStart(),config.getColorEnd()));
+            }
+            /*for(Turn turn : turnHashMap) {
+                    calendarView.addDecorator(new Decorator(turn.getDate())
+                            .generateBackgroundDrawable(this.turnConfigurations.get(turn.getTurn()).getColorStart(),
+                                    this.turnConfigurations.get(turn.getTurn()).getColorEnd()));
+            }*/
+            textViewLoadData.setVisibility(View.GONE);
         }
     }
 
@@ -212,7 +319,7 @@ public class CalendarFragment extends Fragment implements OnDateChangedListener,
             @Override
             public void onClick(View v) {
                 floatingActionMenu.close(true);
-                new CalendarDialog(getActivity()).showChangeTurnDialog();
+                new CalendarDialog(getActivity(),calendarView).showChangeTurnDialog();
             }
         });
 
