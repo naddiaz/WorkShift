@@ -19,7 +19,7 @@
             android:layout_height="match_parent"
             app:mcv_showOtherDates="false"
             app:mcv_arrowColor="@color/md_white"
-            app:mcv_selectionColor="@color/md_grey_500"
+            app:mcv_selectionColor="@color/md_grey_800"
             app:mcv_headerTextAppearance="?android:attr/textAppearanceMedium"
             app:mcv_dateTextAppearance="@style/CustomDayTextAppearance"
             app:mcv_weekDayTextAppearance="?android:attr/textAppearanceMedium"
@@ -66,11 +66,23 @@
                 android:layout_height="match_parent"
                 android:layout_below="@+id/top_container">
 
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="@string/load_detail"
+                    android:id="@+id/textView_loadDetail"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:textColor="@color/md_grey_900"
+                    android:visibility="gone"
+                    android:background="@color/md_grey_200" />
+
                 <ListView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/listView_detailTurn"
                     android:headerDividersEnabled="false" />
+
             </RelativeLayout>
         </ScrollView>
     </LinearLayout>

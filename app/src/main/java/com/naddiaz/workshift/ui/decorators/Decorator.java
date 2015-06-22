@@ -62,8 +62,8 @@ public class Decorator implements DayViewDecorator {
     public Decorator generateBackgroundDrawable(String hexColorStart, String hexColorEnd) {
         final int r = 10;
         final float[] outerR = new float[] {r, r, r, r, r, r, r, r};
-        final int color = Color.parseColor("#B4" + hexColorStart);
-        final int colorEnd = (hexColorEnd == null) ? color : Color.parseColor("#B4" + hexColorEnd);
+        final int color = Color.parseColor("#CC" + hexColorStart);
+        final int colorEnd = (hexColorEnd == null) ? color : Color.parseColor("#CC" + hexColorEnd);
 
         RoundRectShape rr = new RoundRectShape(outerR, null, null);
 

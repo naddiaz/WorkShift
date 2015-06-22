@@ -61,6 +61,7 @@ public class CalendarFragment extends Fragment implements OnDateChangedListener,
     TextView textViewDateBox;
     ListView listViewDetail;
     TextView textViewLoadData;
+    TextView textViewLoadDetail;
 
     public static DatabaseHelper databaseHelper;
     public static TurnConfigurationHelper turnConfigurationHelper;
@@ -86,6 +87,7 @@ public class CalendarFragment extends Fragment implements OnDateChangedListener,
             }
         });
         textViewLoadData = (TextView) rootView.findViewById(R.id.textView_loadData);
+        textViewLoadDetail = (TextView) rootView.findViewById(R.id.textView_loadDetail);
         floatingActionMenu = (FloatingActionMenu) rootView.findViewById(R.id.fam_options);
         defineFloatingButtonActions(rootView);
         calendarView = (MaterialCalendarView) rootView.findViewById(R.id.calendarView);
@@ -140,6 +142,7 @@ public class CalendarFragment extends Fragment implements OnDateChangedListener,
         listViewDetail.setAdapter(detailListAdapter);
 
         loadActualMonth(calendarView.getCurrentDate());
+        loadActualDay(calendarView.getSelectedDate());
 
         rootView.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT ));
         return rootView;
@@ -178,12 +181,7 @@ public class CalendarFragment extends Fragment implements OnDateChangedListener,
                 + getResources().getStringArray(R.array.full_months)[calendarDay.getMonth()] + " "
                 + calendarDay.getYear());
         floatingActionMenu.close(true);
-
-        detailItemArrayList.add(new DetailItem().setActualTurn("Turno: TARDE y NOCHE"));
-        detailItemArrayList.add(new DetailItem().addChangeTurn("Actual: TARDE","Anterior: MAÑANA"));
-        detailItemArrayList.add(new DetailItem("Doblaje: NOCHE",null,DetailItem.ACTION_DOUBLE_TURN));
-        detailItemArrayList.add(new DetailItem("CAMBIO CON MARIA DEL CARMEN EL DÍA 22",null,DetailItem.ACTION_COMMENT));
-        detailListAdapter.notifyDataSetChanged();
+        loadActualDay(calendarView.getSelectedDate());
     }
 
     @Override
@@ -298,19 +296,77 @@ public class CalendarFragment extends Fragment implements OnDateChangedListener,
         protected void onPostExecute(HashMap<Integer, ArrayList<Date>> turnHashMap) {
             super.onPostExecute(turnHashMap);
             for(Map.Entry<Integer,ArrayList<Date>> entry : turnHashMap.entrySet()){
-                Log.i(CALENDAR_FRAGMENT,entry.getKey() + " ---> " + entry.getValue().toString());
-                TurnConfiguration config = this.turnConfigurations.get(entry.getKey());
-                calendarView.addDecorator(new Decorator(entry.getValue()).generateBackgroundDrawable(config.getColorStart(),config.getColorEnd()));
+                if(!entry.getValue().isEmpty()) {
+                    TurnConfiguration config = this.turnConfigurations.get(entry.getKey());
+                    calendarView.addDecorator(new Decorator(entry.getValue()).generateBackgroundDrawable(config.getColorStart(), config.getColorEnd()));
+                }
             }
-            /*for(Turn turn : turnHashMap) {
-                    calendarView.addDecorator(new Decorator(turn.getDate())
-                            .generateBackgroundDrawable(this.turnConfigurations.get(turn.getTurn()).getColorStart(),
-                                    this.turnConfigurations.get(turn.getTurn()).getColorEnd()));
-            }*/
             textViewLoadData.setVisibility(View.GONE);
         }
     }
 
+    private void loadActualDay(CalendarDay calendarDay){
+        new DetailLoader(calendarDay)
+                .executeOnExecutor(Executors.newSingleThreadExecutor());
+    }
+
+    private class DetailLoader extends AsyncTask<Void, Void, Turn> {
+
+        private CalendarDay calendarDay;
+        ArrayList<DetailItem> detailItemArrayList = new ArrayList<>();
+
+        public DetailLoader(CalendarDay calendarDay) {
+            this.calendarDay = calendarDay;
+
+            databaseHelper = new DatabaseHelper(getActivity());
+            turnConfigurationHelper = new TurnConfigurationHelper(databaseHelper);
+            turnHelper = new TurnHelper(databaseHelper);
+        }
+
+        @Override
+        protected Turn doInBackground(Void... voids) {
+            Turn turn = null;
+            try {
+                String dateStr = calendarDay.getYear() + ".";
+                dateStr += (calendarDay.getMonth() + 1) + ".";
+                dateStr += calendarDay.getDay();
+
+                Log.i("TAG",dateStr);
+
+                ArrayList<Turn> turnArrayList = (ArrayList<Turn>) turnHelper.getTurnDAO()
+                        .queryBuilder()
+                        .where()
+                        .eq(Turn.DATE, dateStr)
+                        .query();
+                Log.i("TAG",turnArrayList.toString());
+                if(!turnArrayList.isEmpty()){
+                    turn = turnArrayList.get(0);
+                    String[] turns = getResources().getStringArray(R.array.turns_names);
+                    this.detailItemArrayList.add(new DetailItem().setActualTurn("Turno: " + turns[turn.getTurn()].toUpperCase()));
+                }
+                else{
+                    this.detailItemArrayList.add(new DetailItem().setActualTurn("No se ha definido el turno para este día"));
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            return turn;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            textViewLoadDetail.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected void onPostExecute(Turn turn) {
+            super.onPostExecute(turn);
+            detailListAdapter = new DetailListAdapter(getActivity(), this.detailItemArrayList);
+            listViewDetail.setAdapter(detailListAdapter);
+            detailListAdapter.notifyDataSetChanged();
+            textViewLoadDetail.setVisibility(View.GONE);
+        }
+    }
     private void defineFloatingButtonActions(View rootView){
 
         FloatingActionButton fab_define_turns = (FloatingActionButton) rootView.findViewById(R.id.fab_change_turn);

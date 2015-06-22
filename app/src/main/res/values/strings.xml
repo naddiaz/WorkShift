@@ -60,6 +60,16 @@
         <item>F</item>
     </string-array>
 
+    <string-array name="turns_names_simple">
+        <item>Mañana</item>
+        <item>Tarde</item>
+        <item>Noche</item>
+        <item>Libre</item>
+        <item>Saliente</item>
+        <item>Vacaciones</item>
+        <item>Festivo</item>
+    </string-array>
+
     <string-array name="turns_names">
         <item>Mañana</item>
         <item>Tarde</item>
@@ -88,6 +98,11 @@
     <string name="content_help_create_turns">Para insertar los turnos de un mes es necesario indicar la inicial del turno deseado\nPor ejemplo: <b>M indica Mañana</b> \nPor otro lado, se inserta una secuencia de caracteres sin espacios con dichas iniciales\nDe esta manera el caracter de la 4ª posición indicará el turno para el día 4 de ese mes.\nPor ejemplo: <b>MMTN...</b> indica que el día 1 y 2 está de MAÑANA, el 3 de TARDE, el 4 de NOCHE, y así con todos los días de ese mes.</string>
     <string name="add_turns_save">Guardar</string>
     <string name="loadData">Cargando datos ...</string>
+    <string name="change_select_turn">Seleccione un turno</string>
+    <string name="change_not_turn">No se ha definido el turno para esta fecha</string>
+    <string name="turn">"Turno: "</string>
+    <string name="disagree">Cancelar</string>
+    <string name="load_detail">Cargando datos ...</string>
 
 
 </resources>
