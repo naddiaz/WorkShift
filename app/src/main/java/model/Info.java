@@ -14,16 +14,18 @@ public class Info {
     public static final int DOUBLE = 2;
     public static final int COMMENT = 3;
 
+    public static final String ID = "id";
     public static final String TURN = "turn";
     public static final String DATE = "date";
     public static final String TITLE = "title";
     public static final String DETAIL = "detail";
     public static final String TYPE = "type";
 
-
+    @DatabaseField(generatedId = true, columnName = ID)
+    private int _id;
     @DatabaseField(canBeNull = false, columnName = TURN)
     private int turn;
-    @DatabaseField(id = true, canBeNull = false, columnName = DATE)
+    @DatabaseField(canBeNull = false, columnName = DATE)
     String date;
     @DatabaseField(canBeNull = false, columnName = TITLE)
     String title;
@@ -67,5 +69,16 @@ public class Info {
 
     public int getType() {
         return type;
+    }
+
+    @Override
+    public String toString() {
+        return "Info{" +
+                "turn=" + turn +
+                ", date='" + date + '\'' +
+                ", title='" + title + '\'' +
+                ", detail='" + detail + '\'' +
+                ", type=" + type +
+                '}';
     }
 }

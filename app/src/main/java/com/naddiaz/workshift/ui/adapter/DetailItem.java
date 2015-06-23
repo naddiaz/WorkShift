@@ -2,6 +2,8 @@ package com.naddiaz.workshift.ui.adapter;
 
 import com.naddiaz.workshift.R;
 
+import model.Info;
+
 /**
  * Created by NESTOR on 20/06/2015.
  */
@@ -15,6 +17,7 @@ public class DetailItem {
     private String title;
     private String detail;
     private int icon;
+    private int type;
 
     public DetailItem() {
     }
@@ -22,20 +25,29 @@ public class DetailItem {
     public DetailItem(String title, String detail, String icon) {
         this.title = title;
         this.detail = detail;
-        if(icon == ACTION_CHANGE_TURN)
+        if(icon == ACTION_CHANGE_TURN) {
             this.icon = R.drawable.ic_action_change;
-        if(icon == ACTION_DOUBLE_TURN)
+            this.type = Info.CHANGE;
+        }
+        if(icon == ACTION_DOUBLE_TURN) {
             this.icon = R.drawable.ic_action_double;
-        if(icon == ACTION_COMMENT)
+            this.type = Info.DOUBLE;
+        }
+        if(icon == ACTION_COMMENT) {
             this.icon = R.drawable.ic_action_comment;
-        if(icon == ACTION_ACTUAL_TURN)
+            this.type = Info.COMMENT;
+        }
+        if(icon == ACTION_ACTUAL_TURN) {
             this.icon = R.drawable.ic_action_actual;
+            this.type = Info.ACTUAL_TURN;
+        }
     }
 
     public DetailItem setActualTurn(String turn){
         this.title = turn;
         this.detail = null;
         this.icon = R.drawable.ic_action_actual;
+        this.type = Info.ACTUAL_TURN;
         return this;
     }
 
@@ -43,6 +55,7 @@ public class DetailItem {
         this.title = actual;
         this.detail = last;
         this.icon = R.drawable.ic_action_change;
+        this.type = Info.CHANGE;
         return this;
     }
 
@@ -50,6 +63,7 @@ public class DetailItem {
         this.title = turn;
         this.detail = null;
         this.icon = R.drawable.ic_action_double;
+        this.type = Info.DOUBLE;
         return this;
     }
 
@@ -57,6 +71,7 @@ public class DetailItem {
         this.title = comment;
         this.detail = null;
         this.icon = R.drawable.ic_action_comment;
+        this.type = Info.COMMENT;
         return this;
     }
 
@@ -70,5 +85,9 @@ public class DetailItem {
 
     public int getIcon() {
         return icon;
+    }
+
+    public int getType() {
+        return type;
     }
 }

@@ -38,9 +38,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Executors;
 
+import model.Info;
 import model.Turn;
 import model.TurnConfiguration;
 import model.helpers.DatabaseHelper;
+import model.helpers.InfoHelper;
 import model.helpers.TurnConfigurationHelper;
 import model.helpers.TurnHelper;
 
@@ -66,6 +68,7 @@ public class CalendarFragment extends Fragment implements OnDateChangedListener,
     public static DatabaseHelper databaseHelper;
     public static TurnConfigurationHelper turnConfigurationHelper;
     public static TurnHelper turnHelper;
+    public static InfoHelper infoHelper;
 
     public static CalendarFragment newInstance(String text){
         CalendarFragment mFragment = new CalendarFragment();
@@ -138,7 +141,7 @@ public class CalendarFragment extends Fragment implements OnDateChangedListener,
         textViewDateBox.setText(calendarView.getSelectedDate().getDay() + " "
                 + getResources().getStringArray(R.array.full_months)[calendarView.getSelectedDate().getMonth()] + " "
                 + calendarView.getSelectedDate().getYear());
-        detailListAdapter = new DetailListAdapter(getActivity(), detailItemArrayList);
+        detailListAdapter = new DetailListAdapter(getActivity(), detailItemArrayList, calendarView.getSelectedDate());
         listViewDetail.setAdapter(detailListAdapter);
 
         loadActualMonth(calendarView.getCurrentDate());
@@ -321,6 +324,7 @@ public class CalendarFragment extends Fragment implements OnDateChangedListener,
             databaseHelper = new DatabaseHelper(getActivity());
             turnConfigurationHelper = new TurnConfigurationHelper(databaseHelper);
             turnHelper = new TurnHelper(databaseHelper);
+            infoHelper = new InfoHelper(databaseHelper);
         }
 
         @Override
@@ -347,6 +351,27 @@ public class CalendarFragment extends Fragment implements OnDateChangedListener,
                 else{
                     this.detailItemArrayList.add(new DetailItem().setActualTurn("No se ha definido el turno para este día"));
                 }
+
+                ArrayList<Info> infoArrayList =(ArrayList<Info>) infoHelper.getInfoDAO()
+                        .queryBuilder()
+                        .orderBy(Info.TYPE,true)
+                        .where()
+                        .eq(Turn.DATE, dateStr)
+                        .query();
+                if(!infoArrayList.isEmpty()){
+                    for(Info info: infoArrayList) {
+                        String[] turns = getResources().getStringArray(R.array.turns_names);
+                        if(info.getType() == Info.DOUBLE) {
+                            this.detailItemArrayList.add(new DetailItem().addDoubleTurn("Doblaje: " + turns[info.getTurn()].toUpperCase()));
+                        }
+                        else if(info.getType() == Info.COMMENT) {
+                            this.detailItemArrayList.add(new DetailItem().addComment(info.getTitle()));
+                        }
+                        else if(info.getType() == Info.CHANGE) {
+                            this.detailItemArrayList.add(new DetailItem().addChangeTurn(info.getTitle(),info.getDetail()));
+                        }
+                    }
+                }
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -355,23 +380,23 @@ public class CalendarFragment extends Fragment implements OnDateChangedListener,
 
         @Override
         protected void onPreExecute() {
-            textViewLoadDetail.setVisibility(View.VISIBLE);
+            //textViewLoadDetail.setVisibility(View.VISIBLE);
         }
 
         @Override
         protected void onPostExecute(Turn turn) {
             super.onPostExecute(turn);
-            detailListAdapter = new DetailListAdapter(getActivity(), this.detailItemArrayList);
+            detailListAdapter = new DetailListAdapter(getActivity(), this.detailItemArrayList, this.calendarDay);
             listViewDetail.setAdapter(detailListAdapter);
             detailListAdapter.notifyDataSetChanged();
-            textViewLoadDetail.setVisibility(View.GONE);
+            //textViewLoadDetail.setVisibility(View.GONE);
         }
     }
     private void defineFloatingButtonActions(View rootView){
 
-        FloatingActionButton fab_define_turns = (FloatingActionButton) rootView.findViewById(R.id.fab_change_turn);
+        FloatingActionButton fab_changeTurn = (FloatingActionButton) rootView.findViewById(R.id.fab_change_turn);
 
-        fab_define_turns.setOnClickListener(new View.OnClickListener() {
+        fab_changeTurn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 floatingActionMenu.close(true);
@@ -379,20 +404,22 @@ public class CalendarFragment extends Fragment implements OnDateChangedListener,
             }
         });
 
-        FloatingActionButton fab_enter_month = (FloatingActionButton) rootView.findViewById(R.id.fab_add_turn);
+        FloatingActionButton fab_addTurn = (FloatingActionButton) rootView.findViewById(R.id.fab_add_turn);
 
-        fab_enter_month.setOnClickListener(new View.OnClickListener() {
+        fab_addTurn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 floatingActionMenu.close(true);
+                new CalendarDialog(getActivity(),calendarView).showDoubleTurnDialog();
             }
         });
 
-        FloatingActionButton fab_discard_interval = (FloatingActionButton) rootView.findViewById(R.id.fab_add_comment);
-        fab_discard_interval.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton fab_addComment = (FloatingActionButton) rootView.findViewById(R.id.fab_add_comment);
+        fab_addComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 floatingActionMenu.close(true);
+                new CalendarDialog(getActivity(),calendarView).showCommentDialog();
             }
         });
     }

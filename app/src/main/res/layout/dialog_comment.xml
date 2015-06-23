@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:inputType="textMultiLine"
+        android:ems="10"
+        android:id="@+id/editText_turnComment"
+        android:layout_gravity="center_horizontal"
+        android:padding="10dp"
+        android:textColor="@color/md_grey_900"
+        android:textColorHint="@color/md_grey_600"
+        android:hint="Escriba su comentario ..."
+        android:gravity="top"
+        android:layout_margin="10dp" />
+</LinearLayout>

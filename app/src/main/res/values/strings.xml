@@ -70,6 +70,12 @@
         <item>Festivo</item>
     </string-array>
 
+    <string-array name="turns_names_double">
+        <item>Mañana</item>
+        <item>Tarde</item>
+        <item>Noche</item>
+    </string-array>
+
     <string-array name="turns_names">
         <item>Mañana</item>
         <item>Tarde</item>
@@ -103,6 +109,9 @@
     <string name="turn">"Turno: "</string>
     <string name="disagree">Cancelar</string>
     <string name="load_detail">Cargando datos ...</string>
+    <string name="double_turn">Añadir un turno</string>
+    <string name="not_double_change">No se puede añadir un doblaje.\n\nSolamente es posible para los turnos de:\nMANAÑA, TARDE y NOCHE</string>
+    <string name="turn_add_comment">Añadir un comentario</string>
 
 
 </resources>

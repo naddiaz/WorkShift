@@ -20,7 +20,7 @@ import model.TurnConfiguration;
 public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
     private static final String DATABASE_NAME = "work_shift.db";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 4;
 
 
     public DatabaseHelper(Context context) {
