@@ -21,7 +21,11 @@ import com.naddiaz.workshift.R;
 
 import java.sql.SQLException;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 import model.Turn;
 import model.helpers.DatabaseHelper;
@@ -163,7 +167,6 @@ public class MonthAddFragment extends Fragment {
 
         @Override
         public void onClick(View view) {
-            String[] cap = getResources().getStringArray(R.array.turns_names_cap);
             String sequence = editText.getText().toString().toUpperCase();
             Log.i(MONTH_ADD_FRAGMENT,sequence);
             int year = selectedYear;
@@ -171,22 +174,24 @@ public class MonthAddFragment extends Fragment {
             for(int i=0; i<sequence.length(); i++){
                 try {
                     Turn turn = null;
-                    if(cap[0].charAt(0) == sequence.charAt(i))
-                        turn = new Turn(Turn.TURN_MORNING,(i+1),(month),year);
-                    else if(cap[1].charAt(0) == sequence.charAt(i))
-                        turn = new Turn(Turn.TURN_AFTERNOON,(i+1),(month),year);
-                    else if(cap[2].charAt(0) == sequence.charAt(i))
-                        turn = new Turn(Turn.TURN_EVENING,(i+1),(month),year);
-                    else if(cap[3].charAt(0) == sequence.charAt(i))
-                        turn = new Turn(Turn.TURN_UNOCCUPIED,(i+1),(month),year);
-                    else if(cap[4].charAt(0) == sequence.charAt(i))
-                        turn = new Turn(Turn.TURN_OUTGOING,(i+1),(month),year);
-                    else if(cap[5].charAt(0) == sequence.charAt(i))
-                        turn = new Turn(Turn.TURN_HOLIDAY,(i+1),(month),year);
-                    else if(cap[6].charAt(0) == sequence.charAt(i))
-                        turn = new Turn(Turn.TURN_FESTIVE,(i+1),(month),year);
-                    if(turn != null)
+                    if (getResources().getString(R.string.morning).charAt(0) == sequence.charAt(i))
+                        turn = new Turn(Turn.MORNING, (i + 1), (month), year);
+                    else if (getResources().getString(R.string.afternoon).charAt(0) == sequence.charAt(i))
+                        turn = new Turn(Turn.AFTERNOON, (i + 1), (month), year);
+                    else if (getResources().getString(R.string.evening).charAt(0) == sequence.charAt(i))
+                        turn = new Turn(Turn.EVENING, (i + 1), (month), year);
+                    else if (getResources().getString(R.string.unoccupied).charAt(0) == sequence.charAt(i))
+                        turn = new Turn(Turn.UNOCCUPIED, (i + 1), (month), year);
+                    else if (getResources().getString(R.string.outgoing).charAt(0) == sequence.charAt(i))
+                        turn = new Turn(Turn.OUTGOING, (i + 1), (month), year);
+                    else if (getResources().getString(R.string.holiday).charAt(0) == sequence.charAt(i))
+                        turn = new Turn(Turn.HOLIDAY, (i + 1), (month), year);
+                    else if (getResources().getString(R.string.festive).charAt(0) == sequence.charAt(i))
+                        turn = new Turn(Turn.FESTIVE, (i + 1), (month), year);
+                    if (turn != null) {
+                        turn.setTurnActual(turn.getTurnOriginal());
                         turnHelper.getTurnDAO().createOrUpdate(turn);
+                    }
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }

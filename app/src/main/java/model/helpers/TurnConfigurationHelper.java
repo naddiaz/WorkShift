@@ -1,5 +1,7 @@
 package model.helpers;
 
+import android.util.Log;
+
 import com.j256.ormlite.dao.Dao;
 import com.naddiaz.workshift.ui.decorators.Colors;
 
@@ -30,61 +32,61 @@ public class TurnConfigurationHelper {
     public void loadDefaultConfiguration() throws SQLException {
         TurnConfiguration turnConfiguration = new TurnConfiguration();
 
-        turnConfiguration.setTurn(Turn.TURN_MORNING);
-        turnConfiguration.setColorStart(Colors.TEAL);
+        turnConfiguration.setTurn(Turn.MORNING);
+        turnConfiguration.setColorStart(Colors.BROWN);
         turnConfiguration.setColorEnd(Colors.TEAL);
         this.getTurnConfigurationDAO().create(turnConfiguration);
 
         turnConfiguration = new TurnConfiguration();
-        turnConfiguration.setTurn(Turn.TURN_AFTERNOON);
+        turnConfiguration.setTurn(Turn.AFTERNOON);
         turnConfiguration.setColorStart(Colors.AMBER);
         turnConfiguration.setColorEnd(Colors.AMBER);
         this.getTurnConfigurationDAO().create(turnConfiguration);
 
         turnConfiguration = new TurnConfiguration();
-        turnConfiguration.setTurn(Turn.TURN_EVENING);
+        turnConfiguration.setTurn(Turn.EVENING);
         turnConfiguration.setColorStart(Colors.RED);
         turnConfiguration.setColorEnd(Colors.RED);
         this.getTurnConfigurationDAO().create(turnConfiguration);
 
         turnConfiguration = new TurnConfiguration();
-        turnConfiguration.setTurn(Turn.TURN_OUTGOING);
+        turnConfiguration.setTurn(Turn.OUTGOING);
         turnConfiguration.setColorStart(Colors.LIGHT_BLUE);
         turnConfiguration.setColorEnd(Colors.LIGHT_BLUE);
         this.getTurnConfigurationDAO().create(turnConfiguration);
 
         turnConfiguration = new TurnConfiguration();
-        turnConfiguration.setTurn(Turn.TURN_UNOCCUPIED);
+        turnConfiguration.setTurn(Turn.UNOCCUPIED);
         turnConfiguration.setColorStart(Colors.GREEN);
         turnConfiguration.setColorEnd(Colors.GREEN);
         this.getTurnConfigurationDAO().create(turnConfiguration);
 
         turnConfiguration = new TurnConfiguration();
-        turnConfiguration.setTurn(Turn.TURN_HOLIDAY);
+        turnConfiguration.setTurn(Turn.HOLIDAY);
         turnConfiguration.setColorStart(Colors.INDIGO);
         turnConfiguration.setColorEnd(Colors.INDIGO);
         this.getTurnConfigurationDAO().create(turnConfiguration);
 
         turnConfiguration = new TurnConfiguration();
-        turnConfiguration.setTurn(Turn.TURN_FESTIVE);
+        turnConfiguration.setTurn(Turn.FESTIVE);
         turnConfiguration.setColorStart(Colors.BROWN);
         turnConfiguration.setColorEnd(Colors.BROWN);
         this.getTurnConfigurationDAO().create(turnConfiguration);
 
         turnConfiguration = new TurnConfiguration();
-        turnConfiguration.setTurn(Turn.TURN_MORNING_AFTERNOON);
+        turnConfiguration.setTurn(Turn.MORNING_AFTERNOON);
         turnConfiguration.setColorStart(Colors.TEAL);
         turnConfiguration.setColorEnd(Colors.AMBER);
         this.getTurnConfigurationDAO().create(turnConfiguration);
 
         turnConfiguration = new TurnConfiguration();
-        turnConfiguration.setTurn(Turn.TURN_MORNING_EVENING);
+        turnConfiguration.setTurn(Turn.MORNING_EVENING);
         turnConfiguration.setColorStart(Colors.TEAL);
         turnConfiguration.setColorEnd(Colors.RED);
         this.getTurnConfigurationDAO().create(turnConfiguration);
 
         turnConfiguration = new TurnConfiguration();
-        turnConfiguration.setTurn(Turn.TURN_AFTERNOON_EVENING);
+        turnConfiguration.setTurn(Turn.AFTERNOON_EVENING);
         turnConfiguration.setColorStart(Colors.AMBER);
         turnConfiguration.setColorEnd(Colors.RED);
         this.getTurnConfigurationDAO().create(turnConfiguration);

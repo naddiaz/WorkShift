@@ -10,7 +10,9 @@ import com.j256.ormlite.table.TableUtils;
 import java.lang.*;
 import java.sql.SQLException;
 
-import model.Info;
+import model.Change;
+import model.Comment;
+import model.Dubbing;
 import model.Turn;
 import model.TurnConfiguration;
 
@@ -20,7 +22,7 @@ import model.TurnConfiguration;
 public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
     private static final String DATABASE_NAME = "work_shift.db";
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 8;
 
 
     public DatabaseHelper(Context context) {
@@ -32,7 +34,9 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         try {
             TableUtils.createTable(connectionSource, Turn.class);
             TableUtils.createTable(connectionSource, TurnConfiguration.class);
-            TableUtils.createTable(connectionSource, Info.class);
+            TableUtils.createTable(connectionSource, Change.class);
+            TableUtils.createTable(connectionSource, Dubbing.class);
+            TableUtils.createTable(connectionSource, Comment.class);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -43,7 +47,9 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         try {
             TableUtils.dropTable(connectionSource,Turn.class,true);
             TableUtils.dropTable(connectionSource,TurnConfiguration.class,true);
-            TableUtils.dropTable(connectionSource,Info.class,true);
+            TableUtils.dropTable(connectionSource,Change.class,true);
+            TableUtils.dropTable(connectionSource,Dubbing.class,true);
+            TableUtils.dropTable(connectionSource,Comment.class,true);
         } catch (SQLException e) {
             e.printStackTrace();
         }

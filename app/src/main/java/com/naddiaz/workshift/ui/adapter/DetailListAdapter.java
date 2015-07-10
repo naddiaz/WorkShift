@@ -1,6 +1,5 @@
 package com.naddiaz.workshift.ui.adapter;
 
-import android.content.Context;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,13 +13,12 @@ import android.widget.TextView;
 import com.naddiaz.workshift.R;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 
-import model.Info;
-import model.Turn;
+import model.helpers.ChangeHelper;
+import model.helpers.CommentHelper;
 import model.helpers.DatabaseHelper;
-import model.helpers.InfoHelper;
+import model.helpers.DubbingHelper;
 import model.helpers.TurnHelper;
 
 /**
@@ -34,7 +32,9 @@ public class DetailListAdapter extends BaseAdapter {
 
     public static DatabaseHelper databaseHelper;
     public static TurnHelper turnHelper;
-    public static InfoHelper infoHelper;
+    public static ChangeHelper changeHelper;
+    public static DubbingHelper dubbingHelper;
+    public static CommentHelper commentHelper;
 
     public DetailListAdapter(FragmentActivity fragmentActivity, ArrayList<DetailItem> detailItemArrayList, CalendarDay selectedDay) {
         this.fragmentActivity = fragmentActivity;
@@ -42,8 +42,6 @@ public class DetailListAdapter extends BaseAdapter {
         this.selectedDay = selectedDay;
 
         databaseHelper = new DatabaseHelper(fragmentActivity);
-        turnHelper = new TurnHelper(databaseHelper);
-        infoHelper = new InfoHelper(databaseHelper);
     }
 
     @Override
@@ -80,15 +78,13 @@ public class DetailListAdapter extends BaseAdapter {
         textViewItemTitle.setText(detailItem.getTitle());
         imageViewIcon.setImageDrawable(this.fragmentActivity.getResources().getDrawable(detailItem.getIcon()));
 
-        String dateStr = selectedDay.getYear() + ".";
-        dateStr += (selectedDay.getMonth() + 1) + ".";
-        dateStr += selectedDay.getDay();
+        final String dateStr = selectedDay.getYear() + "." + (selectedDay.getMonth() + 1) + "." + selectedDay.getDay();
 
-        if (detailItem.getType() == Info.DOUBLE) {
+        /*if (detailItem.getType() == Info.DOUBLE) {
             linearLayoutContainer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Log.i("TAG", "IS A DOUBLE");
+                    new CalendarDialog(fragmentActivity).deleteDoubleDialog(dateStr,(selectedDay.getMonth() + 1),selectedDay.getYear());
                 }
             });
         }
@@ -104,11 +100,14 @@ public class DetailListAdapter extends BaseAdapter {
             linearLayoutContainer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Log.i("TAG", "IS A CHANGE");
+                    new CalendarDialog(fragmentActivity).deleteChangeDialog(dateStr,(selectedDay.getMonth() + 1),selectedDay.getYear());
                 }
             });
         }
         else if (detailItem.getType() == Info.ACTUAL_TURN) {
+            imageViewEdit.setVisibility(View.GONE);
+        }*/
+        if (i == 0) {
             imageViewEdit.setVisibility(View.GONE);
         }
         return v;

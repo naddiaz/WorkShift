@@ -38,11 +38,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Executors;
 
-import model.Info;
+import model.Change;
+import model.Comment;
+import model.Dubbing;
 import model.Turn;
 import model.TurnConfiguration;
+import model.helpers.ChangeHelper;
+import model.helpers.CommentHelper;
 import model.helpers.DatabaseHelper;
-import model.helpers.InfoHelper;
+import model.helpers.DubbingHelper;
 import model.helpers.TurnConfigurationHelper;
 import model.helpers.TurnHelper;
 
@@ -68,7 +72,9 @@ public class CalendarFragment extends Fragment implements OnDateChangedListener,
     public static DatabaseHelper databaseHelper;
     public static TurnConfigurationHelper turnConfigurationHelper;
     public static TurnHelper turnHelper;
-    public static InfoHelper infoHelper;
+    public static ChangeHelper changeHelper;
+    public static DubbingHelper dubbingHelper;
+    public static CommentHelper commentHelper;
 
     public static CalendarFragment newInstance(String text){
         CalendarFragment mFragment = new CalendarFragment();
@@ -253,7 +259,7 @@ public class CalendarFragment extends Fragment implements OnDateChangedListener,
                         .query();
                 this.turnConfigurations = (ArrayList<TurnConfiguration>) turnConfigurationHelper.getTurnConfigurationDAO()
                         .queryBuilder()
-                        .orderBy(Turn.TURN,true)
+                        .orderBy(TurnConfiguration.TURN,true)
                         .query();
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -263,16 +269,16 @@ public class CalendarFragment extends Fragment implements OnDateChangedListener,
                     turnConfigurationHelper.loadDefaultConfiguration();
                     this.turnConfigurations = (ArrayList<TurnConfiguration>) turnConfigurationHelper.getTurnConfigurationDAO()
                             .queryBuilder()
-                            .orderBy(Turn.TURN,true)
+                            .orderBy(TurnConfiguration.TURN,true)
                             .query();
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
             }
-            for(int i=0; i<Turn.TURN_TYPES; i++) {
+            for(int i=1; i<=Turn.TYPES; i++) {
                 ArrayList<Date> tmp = new ArrayList<>();
                 for (Turn turn : turns) {
-                    if(turn.getTurn() == i){
+                    if(turn.getTurnActual() == i){
                         DateFormat format = new SimpleDateFormat("yyyy.MM.dd");
                         Date date = null;
                         try {
@@ -300,7 +306,7 @@ public class CalendarFragment extends Fragment implements OnDateChangedListener,
             super.onPostExecute(turnHashMap);
             for(Map.Entry<Integer,ArrayList<Date>> entry : turnHashMap.entrySet()){
                 if(!entry.getValue().isEmpty()) {
-                    TurnConfiguration config = this.turnConfigurations.get(entry.getKey());
+                    TurnConfiguration config = this.turnConfigurations.get(entry.getKey()-1);
                     calendarView.addDecorator(new Decorator(entry.getValue()).generateBackgroundDrawable(config.getColorStart(), config.getColorEnd()));
                 }
             }
@@ -324,7 +330,6 @@ public class CalendarFragment extends Fragment implements OnDateChangedListener,
             databaseHelper = new DatabaseHelper(getActivity());
             turnConfigurationHelper = new TurnConfigurationHelper(databaseHelper);
             turnHelper = new TurnHelper(databaseHelper);
-            infoHelper = new InfoHelper(databaseHelper);
         }
 
         @Override
@@ -335,42 +340,57 @@ public class CalendarFragment extends Fragment implements OnDateChangedListener,
                 dateStr += (calendarDay.getMonth() + 1) + ".";
                 dateStr += calendarDay.getDay();
 
-                Log.i("TAG",dateStr);
+                Log.i("DetailLoader",dateStr);
 
                 ArrayList<Turn> turnArrayList = (ArrayList<Turn>) turnHelper.getTurnDAO()
                         .queryBuilder()
                         .where()
                         .eq(Turn.DATE, dateStr)
                         .query();
-                Log.i("TAG",turnArrayList.toString());
+                Log.i("DetailLoader",turnArrayList.toString());
                 if(!turnArrayList.isEmpty()){
                     turn = turnArrayList.get(0);
                     String[] turns = getResources().getStringArray(R.array.turns_names);
-                    this.detailItemArrayList.add(new DetailItem().setActualTurn("Turno: " + turns[turn.getTurn()].toUpperCase()));
-                }
-                else{
-                    this.detailItemArrayList.add(new DetailItem().setActualTurn("No se ha definido el turno para este día"));
-                }
 
-                ArrayList<Info> infoArrayList =(ArrayList<Info>) infoHelper.getInfoDAO()
-                        .queryBuilder()
-                        .orderBy(Info.TYPE,true)
-                        .where()
-                        .eq(Turn.DATE, dateStr)
-                        .query();
-                if(!infoArrayList.isEmpty()){
-                    for(Info info: infoArrayList) {
-                        String[] turns = getResources().getStringArray(R.array.turns_names);
-                        if(info.getType() == Info.DOUBLE) {
-                            this.detailItemArrayList.add(new DetailItem().addDoubleTurn("Doblaje: " + turns[info.getTurn()].toUpperCase()));
-                        }
-                        else if(info.getType() == Info.COMMENT) {
-                            this.detailItemArrayList.add(new DetailItem().addComment(info.getTitle()));
-                        }
-                        else if(info.getType() == Info.CHANGE) {
-                            this.detailItemArrayList.add(new DetailItem().addChangeTurn(info.getTitle(),info.getDetail()));
+                    this.detailItemArrayList.add(new DetailItem("Turno: " + turns[turn.getTurnActual()].toUpperCase(), null, Turn.IC_ACTUAL));
+
+                    if (turn.isChange()) {
+                        changeHelper = new ChangeHelper(databaseHelper);
+                        ArrayList<Change> changeArrayList = (ArrayList<Change>) changeHelper.getChangeDAO()
+                                .queryBuilder()
+                                .where()
+                                .eq(Turn.DATE, dateStr)
+                                .query();
+                        for(Change change : changeArrayList) {
+                            this.detailItemArrayList.add(new DetailItem("Cambio: " + turns[change.getTurn()].toUpperCase(),
+                                    "Original: " + turns[turn.getTurnOriginal()].toUpperCase(), Turn.IC_CHANGE));
                         }
                     }
+                    if (turn.isDubbing()) {
+                        dubbingHelper = new DubbingHelper(databaseHelper);
+                        ArrayList<Dubbing> dubbingArrayList = (ArrayList<Dubbing>) dubbingHelper.getDubbingDAO()
+                                .queryBuilder()
+                                .where()
+                                .eq(Turn.DATE, dateStr)
+                                .query();
+                        for(Dubbing dubbing : dubbingArrayList) {
+                            this.detailItemArrayList.add(new DetailItem("Doblaje: " + turns[dubbing.getTurn()].toUpperCase(), null, Turn.IC_DUBBING));
+                        }
+                    }
+                    if (turn.isContainComment()) {
+                        commentHelper = new CommentHelper(databaseHelper);
+                        ArrayList<Comment> commnetArrayList = (ArrayList<Comment>) commentHelper.getCommentDAO()
+                                .queryBuilder()
+                                .where()
+                                .eq(Turn.DATE, dateStr)
+                                .query();
+                        for(Comment comment : commnetArrayList){
+                            this.detailItemArrayList.add(new DetailItem(comment.getText().toUpperCase(),null, Turn.IC_COMMENT));
+                        }
+                    }
+                }
+                else{
+                    this.detailItemArrayList.add(new DetailItem("No se ha definido turno",null,Turn.IC_ACTUAL));
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -410,7 +430,7 @@ public class CalendarFragment extends Fragment implements OnDateChangedListener,
             @Override
             public void onClick(View v) {
                 floatingActionMenu.close(true);
-                new CalendarDialog(getActivity(),calendarView).showDoubleTurnDialog();
+                //new CalendarDialog(getActivity(), calendarView).showDoubleTurnDialog();
             }
         });
 
@@ -419,7 +439,7 @@ public class CalendarFragment extends Fragment implements OnDateChangedListener,
             @Override
             public void onClick(View v) {
                 floatingActionMenu.close(true);
-                new CalendarDialog(getActivity(),calendarView).showCommentDialog();
+                //new CalendarDialog(getActivity(), calendarView).showCommentDialog();
             }
         });
     }
