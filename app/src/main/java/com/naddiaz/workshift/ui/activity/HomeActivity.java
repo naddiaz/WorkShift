@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.naddiaz.workshift.R;
 import com.naddiaz.workshift.ui.fragment.CalendarFragment;
 import com.naddiaz.workshift.ui.fragment.MonthAddFragment;
+import com.naddiaz.workshift.ui.fragment.PersonalizedFragment;
 
 import br.liveo.Model.HelpLiveo;
 import br.liveo.interfaces.OnItemClickListener;
@@ -45,7 +46,7 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
                 .setOnClickUser(onClickPhoto)
                 .setOnPrepareOptionsMenu(onPrepare)
                 .setOnClickFooter(onClickFooter)
-                .footerItem(R.string.action_settings, R.drawable.ic_action_settings)
+                .footerItem(R.string.menu_item_settings, R.drawable.ic_action_settings)
                 .build();
     }
 
@@ -56,6 +57,9 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
         switch (position){
             case 3:
                 mFragment = MonthAddFragment.newInstance(mHelpLiveo.get(position).getName());
+                break;
+            case 4:
+                mFragment = PersonalizedFragment.newInstance(mHelpLiveo.get(position).getName());
                 break;
             default:
                 mFragment = CalendarFragment.newInstance(mHelpLiveo.get(position).getName());

@@ -87,23 +87,24 @@ public class CalendarDialog {
                             public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                                 for (Map.Entry<Integer, Integer> turnInt : Turn.intFromName.entrySet()) {
                                     if (fragmentActivity.getResources().getString(turnInt.getKey()).equals(String.valueOf(text))) {
-                                        Change change = new Change(turnInt.getValue(),turn.getDate());
-                                        Log.i("CHANGE",change.toString());
-                                        Turn newTurn = turn;
-                                        newTurn.setTurnActual(turnInt.getValue());
-                                        newTurn.setIsChange(true);
-                                        try {
-                                            changeHelper.getChangeDAO().createOrUpdate(change);
-                                            turnHelper.getTurnDAO().createOrUpdate(newTurn);
-                                        } catch (SQLException e) {
-                                            e.printStackTrace();
+                                        if (turnInt.getValue() != turn.getTurnActual()) {
+                                            Change change = new Change(turnInt.getValue(), turn.getDate());
+                                            Turn newTurn = turn;
+                                            newTurn.setTurnActual(turnInt.getValue());
+                                            newTurn.setIsChange(true);
+                                            try {
+                                                changeHelper.getChangeDAO().createOrUpdate(change);
+                                                turnHelper.getTurnDAO().createOrUpdate(newTurn);
+                                                fragmentActivity.getSupportFragmentManager()
+                                                        .beginTransaction()
+                                                        .replace(R.id.container, new CalendarFragment())
+                                                        .commit();
+                                            } catch (SQLException e) {
+                                                e.printStackTrace();
+                                            }
                                         }
                                     }
                                 }
-                                fragmentActivity.getSupportFragmentManager()
-                                        .beginTransaction()
-                                        .replace(R.id.container, new CalendarFragment())
-                                        .commit();
                                 return true;
                             }
                         })
@@ -200,23 +201,24 @@ public class CalendarDialog {
                             public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                                 for (Map.Entry<Integer, Integer> turnInt : Turn.intFromName.entrySet()) {
                                     if (fragmentActivity.getResources().getString(turnInt.getKey()).equals(String.valueOf(text))) {
-                                        Dubbing dubbing = new Dubbing(turnInt.getValue(), turn.getDate());
-                                        Log.i("DUBBING",dubbing.toString());
-                                        Turn newTurn = turn;
-                                        newTurn.setTurnActual(turnInt.getValue()+turn.getTurnActual());
-                                        newTurn.setIsDubbing(true);
-                                        try {
-                                            dubbingHelper.getDubbingDAO().createOrUpdate(dubbing);
-                                            turnHelper.getTurnDAO().createOrUpdate(newTurn);
-                                        } catch (SQLException e) {
-                                            e.printStackTrace();
+                                        if (turnInt.getValue() != turn.getTurnActual()) {
+                                            Dubbing dubbing = new Dubbing(turnInt.getValue(), turn.getDate());
+                                            Turn newTurn = turn;
+                                            newTurn.setTurnActual(turnInt.getValue() + turn.getTurnActual());
+                                            newTurn.setIsDubbing(true);
+                                            try {
+                                                dubbingHelper.getDubbingDAO().createOrUpdate(dubbing);
+                                                turnHelper.getTurnDAO().createOrUpdate(newTurn);
+                                                fragmentActivity.getSupportFragmentManager()
+                                                        .beginTransaction()
+                                                        .replace(R.id.container, new CalendarFragment())
+                                                        .commit();
+                                            } catch (SQLException e) {
+                                                e.printStackTrace();
+                                            }
                                         }
                                     }
                                 }
-                                fragmentActivity.getSupportFragmentManager()
-                                        .beginTransaction()
-                                        .replace(R.id.container, new CalendarFragment())
-                                        .commit();
                                 return true;
                             }
                         })

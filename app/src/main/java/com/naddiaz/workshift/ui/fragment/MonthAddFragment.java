@@ -38,6 +38,8 @@ public class MonthAddFragment extends Fragment {
     public static final int TYPE_YEAR = 0;
     public static final int TYPE_MONTH = 1;
 
+    EditText ed_sequence;
+
     public static MonthAddFragment newInstance(String text){
         MonthAddFragment mFragment = new MonthAddFragment();
         Bundle mBundle = new Bundle();
@@ -61,13 +63,6 @@ public class MonthAddFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_help:
-                new MaterialDialog.Builder(getActivity())
-                        .title(R.string.title_help)
-                        .content(R.string.content_help_create_turns)
-                        .positiveText(R.string.agree)
-                        .show();
-                break;
-            case R.id.action_save:
                 new MaterialDialog.Builder(getActivity())
                         .title(R.string.title_help)
                         .content(R.string.content_help_create_turns)
@@ -109,7 +104,7 @@ public class MonthAddFragment extends Fragment {
         addMonthButton.setOnClickListener(
                 new SelectedDialogClickListener(R.string.month_create_turns,months,addMonth,TYPE_MONTH));
 
-        final EditText ed_sequence = (EditText) rootView.findViewById(R.id.ed_sequence);
+        ed_sequence = (EditText) rootView.findViewById(R.id.ed_sequence);
 
         ImageButton ib_save = (ImageButton) rootView.findViewById(R.id.ib_save);
         ib_save.setOnClickListener(new SaveClickListener(ed_sequence));

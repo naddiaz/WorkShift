@@ -2,7 +2,6 @@
 <resources>
 
     <string name="app_name">Workshift</string>
-    <string name="action_settings">Settings</string>
     <string name="title_activity_home">HomeActivity</string>
 
     <string name="menu_subheaher_schedule">Horarios</string>
@@ -10,6 +9,7 @@
     <string name="menu_subheaher_options">Opciones</string>
     <string name="menu_item_insert">Insertar mes</string>
     <string name="menu_item_personalized">Personalizar</string>
+    <string name="menu_item_settings">Ajustes</string>
 
     <string-array name="custom_weekdays">
         <item>D</item>
@@ -85,10 +85,10 @@
         <item>-</item>
         <item>Mañana</item>
         <item>Tarde</item>
-        <item>Mañana;Tarde</item>
+        <item>Mañana y Tarde</item>
         <item>Noche</item>
-        <item>Mañana;Noche</item>
-        <item>Tarde;Noche</item>
+        <item>Mañana y Noche</item>
+        <item>Tarde y Noche</item>
         <item>Libre</item>
         <item>Saliente</item>
         <item>Vacaciones</item>
@@ -136,6 +136,9 @@
     <string name="delete_comment">¿Está seguro de que desea eliminar el comentario?</string>
     <string name="delete_comment_title">Eliminar comentario</string>
     <string name="info_delete_double_not_valid">No se puede realizar un doblaje de un turno que no sea: <b>Mañana, Tarde o Noche</b></string>
+    <string name="select_color_title">Seleccione un nuevo color</string>
+    <string name="select_color_used">Este color está siendo usado, seleccione uno que no esté en uso.</string>
+    <string name="select_color_generated">Los colores de los turnos compuestos se generan a partir de los simples.</string>
 
 
 </resources>
