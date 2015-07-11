@@ -66,13 +66,9 @@
     </string-array>
 
     <string-array name="turns_names_simple">
-        <item>-</item>
         <item>Mañana</item>
         <item>Tarde</item>
-        <item>-</item>
         <item>Noche</item>
-        <item>-</item>
-        <item>-</item>
         <item>Libre</item>
         <item>Saliente</item>
         <item>Vacaciones</item>
@@ -129,7 +125,7 @@
     <string name="double_turn">Añadir un turno</string>
     <string name="not_double_change">No se puede añadir un doblaje.\n\nSolamente es posible para los turnos de:\nMANAÑA, TARDE y NOCHE</string>
     <string name="turn_add_comment">Añadir un comentario</string>
-    <string name="delete_change_turn">¿Está seguro de que desea eliminar este cambio?\nEsto provocará que se vuelva al turno que estaba antes de realizar el cambio y se eliminen los posibles dobajes que existan</string>
+    <string name="delete_change_turn">¿Está seguro de que desea eliminar este cambio?\nEsto provocará que se vuelva al turno que estaba antes de realizar el cambio y se eliminen los posibles doblajes que existan</string>
     <string name="delete_change_turn_title">Eliminar cambio de turno</string>
     <string name="info_delete_change_for_remove_title">Cambio no válido</string>
     <string name="info_delete_change_for_remove">Ya existe un cambio o no se ha definido el turno.\n\nPara poder realizar otro cambio es necesario que elimine el actual.</string>
@@ -137,6 +133,9 @@
     <string name="info_delete_double_for_remove">No se puede realizar más de un doblaje por día\n\nPara cambiar el turn del doblaje primero debe eliminar el actual.</string>
     <string name="delete_double_turn">¿Está seguro de que desea eliminar este doblaje?</string>
     <string name="delete_double_turn_title">Eliminar turno doble</string>
+    <string name="delete_comment">¿Está seguro de que desea eliminar el comentario?</string>
+    <string name="delete_comment_title">Eliminar comentario</string>
+    <string name="info_delete_double_not_valid">No se puede realizar un doblaje de un turno que no sea: <b>Mañana, Tarde o Noche</b></string>
 
 
 </resources>

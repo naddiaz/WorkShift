@@ -1,7 +1,5 @@
 package model.helpers;
 
-import android.util.Log;
-
 import com.j256.ormlite.dao.Dao;
 import com.naddiaz.workshift.ui.decorators.Colors;
 

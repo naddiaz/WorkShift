@@ -21,6 +21,11 @@ public class Change {
     public Change() {
     }
 
+    public Change(int turn, String date) {
+        this.turn = turn;
+        this.date = date;
+    }
+
     public Change(int turn, int day, int month, int year) {
         this.turn = turn;
         this.date = year + "." + month + "." + day;

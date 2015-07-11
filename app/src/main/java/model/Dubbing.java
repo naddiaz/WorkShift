@@ -21,6 +21,11 @@ public class Dubbing {
     public Dubbing() {
     }
 
+    public Dubbing(int turn, String date) {
+        this.turn = turn;
+        this.date = date;
+    }
+
     public Dubbing(int turn, int day, int month, int year) {
         this.turn = turn;
         this.date = year + "." + month + "." + day;

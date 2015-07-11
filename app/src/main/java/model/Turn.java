@@ -84,6 +84,11 @@ public class Turn{
     public Turn() {
     }
 
+    public Turn(int turn, String date) {
+        this.turnOriginal = turn;
+        this.date = date;
+    }
+
     public Turn(int turn, int day, int month, int year) {
         this.turnOriginal = turn;
         this.date = year + "." + month + "." + day;

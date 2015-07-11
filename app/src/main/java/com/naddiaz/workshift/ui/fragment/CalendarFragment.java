@@ -243,6 +243,7 @@ public class CalendarFragment extends Fragment implements OnDateChangedListener,
             databaseHelper = new DatabaseHelper(getActivity());
             turnConfigurationHelper = new TurnConfigurationHelper(databaseHelper);
             turnHelper = new TurnHelper(databaseHelper);
+            changeHelper = new ChangeHelper(databaseHelper);
         }
 
         @Override
@@ -279,16 +280,7 @@ public class CalendarFragment extends Fragment implements OnDateChangedListener,
                 ArrayList<Date> tmp = new ArrayList<>();
                 for (Turn turn : turns) {
                     if(turn.getTurnActual() == i){
-                        DateFormat format = new SimpleDateFormat("yyyy.MM.dd");
-                        Date date = null;
-                        try {
-                            date = format.parse(turn.getDate());
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
-                        if(date != null) {
-                            tmp.add(date);
-                        }
+                        tmp.add(parseDate(turn.getDate()));
                     }
                 }
                 turnHashMap.put(Integer.valueOf(i),tmp);
@@ -296,6 +288,19 @@ public class CalendarFragment extends Fragment implements OnDateChangedListener,
             return turnHashMap;
         }
 
+        private Date parseDate(String dateStr){
+            DateFormat format = new SimpleDateFormat("yyyy.MM.dd");
+            Date date = null;
+            try {
+                date = format.parse(dateStr);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            if(date != null) {
+                return date;
+            }
+            return null;
+        }
         @Override
         protected void onPreExecute() {
             textViewLoadData.setVisibility(View.VISIBLE);
@@ -430,7 +435,7 @@ public class CalendarFragment extends Fragment implements OnDateChangedListener,
             @Override
             public void onClick(View v) {
                 floatingActionMenu.close(true);
-                //new CalendarDialog(getActivity(), calendarView).showDoubleTurnDialog();
+                new CalendarDialog(getActivity(), calendarView).showDoubleTurnDialog();
             }
         });
 
@@ -439,7 +444,7 @@ public class CalendarFragment extends Fragment implements OnDateChangedListener,
             @Override
             public void onClick(View v) {
                 floatingActionMenu.close(true);
-                //new CalendarDialog(getActivity(), calendarView).showCommentDialog();
+                new CalendarDialog(getActivity(), calendarView).showCommentDialog();
             }
         });
     }

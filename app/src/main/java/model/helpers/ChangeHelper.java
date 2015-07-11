@@ -5,7 +5,6 @@ import com.j256.ormlite.dao.Dao;
 import java.sql.SQLException;
 
 import model.Change;
-import model.Turn;
 
 /**
  * Created by NESTOR on 20/06/2015.

@@ -3,9 +3,7 @@ package com.naddiaz.workshift.ui.fragment;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.text.InputFilter;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,11 +19,6 @@ import com.naddiaz.workshift.R;
 
 import java.sql.SQLException;
 import java.util.Calendar;
-import java.util.Collection;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
 
 import model.Turn;
 import model.helpers.DatabaseHelper;
