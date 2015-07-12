@@ -107,15 +107,15 @@ public class Turn{
 
     @Override
     public String toString() {
-        return "Turn{" +
-                "turnOriginal=" + turnOriginal +
-                ", turnActual=" + turnActual +
-                ", date='" + date + '\'' +
-                ", month=" + month +
-                ", year=" + year +
-                ", isChange=" + isChange +
-                ", isDubbing=" + isDubbing +
-                ", containComment=" + containComment +
+        return "{" +
+                "\"turnOriginal\":" + turnOriginal +
+                ",\"turnActual\":" + turnActual +
+                ",\"date\":\"" + date + '\"' +
+                ",\"month\":" + month +
+                ",\"year\":" + year +
+                ",\"isChange\":" + isChange +
+                ",\"isDubbing\":" + isDubbing +
+                ",\"containComment\":" + containComment +
                 '}';
     }
 

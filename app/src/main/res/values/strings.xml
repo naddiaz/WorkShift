@@ -139,6 +139,23 @@
     <string name="select_color_title">Seleccione un nuevo color</string>
     <string name="select_color_used">Este color está siendo usado, seleccione uno que no esté en uso.</string>
     <string name="select_color_generated">Los colores de los turnos compuestos se generan a partir de los simples.</string>
+    <string name="email">Email</string>
+    <string name="password">Contraseña</string>
+    <string name="login">Acceder</string>
+    <string name="create_account">Crear una cuenta</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="register_account">Crear una cuenta</string>
+    <string name="welcome_register">Bienvenido al registro de WorkShift</string>
+    <string name="last_name">Apellidos</string>
+    <string name="name">Nombre</string>
+    <string name="register">Registrarse</string>
+    <string name="return_home">Volver al inicio</string>
+    <string name="menu_item_close">Cerrar sesión</string>
+    <string name="loading">Cargando</string>
+    <string name="error_login_password">El email y la contraseña no coinciden</string>
+    <string name="error_login_timeout">Ha habido un error en la conexión, por favor inténtelo de nuevo</string>
 
 
 </resources>

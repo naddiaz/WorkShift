@@ -1,5 +1,6 @@
 package com.naddiaz.workshift.ui.activity;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -18,20 +19,29 @@ import br.liveo.Model.HelpLiveo;
 import br.liveo.interfaces.OnItemClickListener;
 import br.liveo.interfaces.OnPrepareOptionsMenuLiveo;
 import br.liveo.navigationliveo.NavigationLiveo;
+import utils.Preferences;
 
 public class HomeActivity extends NavigationLiveo implements OnItemClickListener {
 
     private static final String ACTUAL_FRAGMENT = "actual_fragment";
 
     private HelpLiveo mHelpLiveo;
+    private Preferences preferences;
+    @Override
+    public void onBackPressed() {
+        moveTaskToBack(true);
+    }
 
     @Override
     public void onInt(Bundle bundle) {
         // User Information
-        this.userName.setText("Néstor Álvarez");
-        this.userEmail.setText("naddiaz.92@gmail.com");
-        this.userPhoto.setImageResource(R.drawable.ic_action_profile);
+        preferences = new Preferences(this);
+        this.userName.setText(preferences.getName() + " " + preferences.getLastName());
+        this.userEmail.setText(preferences.getEmail());
         this.userBackground.setImageResource(R.drawable.ic_user_background_first);
+
+        preferences.setIsLogin(true);
+        preferences.save();
 
         mHelpLiveo = new HelpLiveo();
         mHelpLiveo.addSubHeader(getString(R.string.menu_subheaher_schedule));
@@ -46,7 +56,7 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
                 .setOnClickUser(onClickPhoto)
                 .setOnPrepareOptionsMenu(onPrepare)
                 .setOnClickFooter(onClickFooter)
-                .footerItem(R.string.menu_item_settings, R.drawable.ic_action_settings)
+                .footerItem(R.string.menu_item_close, R.drawable.ic_action_close)
                 .build();
     }
 
@@ -99,6 +109,9 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
     private View.OnClickListener onClickFooter = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            preferences.setIsLogin(false);
+            preferences.save();
+            finish();
             closeDrawer();
         }
     };

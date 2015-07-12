@@ -1,5 +1,6 @@
 package com.naddiaz.workshift.ui.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -10,6 +11,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -23,6 +25,7 @@ import java.util.Calendar;
 import model.Turn;
 import model.helpers.DatabaseHelper;
 import model.helpers.TurnHelper;
+import webservices.TurnsUpdateServer;
 
 /**
  * Created by NESTOR on 21/06/2015.
@@ -184,7 +187,13 @@ public class MonthAddFragment extends Fragment {
                     e.printStackTrace();
                 }
             }
-
+            View v = getActivity().getCurrentFocus();
+            if (view != null) {
+                InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(
+                        Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+            }
+            new TurnsUpdateServer(getActivity()).execute();
             FragmentManager mFragmentManager = getActivity().getSupportFragmentManager();
             mFragmentManager.beginTransaction()
                     .setCustomAnimations(R.anim.slide_side_left, R.anim.slide_side_rigth)

@@ -123,7 +123,6 @@ public class ColorListAdapter extends BaseAdapter {
                                                     TurnConfiguration afternoonTurn = null;
                                                     TurnConfiguration eveningTurn = null;
                                                     for (TurnConfiguration turnConfiguration : configurationArrayList) {
-                                                        Log.i("COLOR", turnConfiguration.getColorStart() + " :: " + Colors.listColors[which]);
                                                         if (turnConfiguration.getColorStart().equals(Colors.listColors[which])) {
                                                             count++;
                                                         }
@@ -134,7 +133,6 @@ public class ColorListAdapter extends BaseAdapter {
                                                         if (turnConfiguration.getTurn() == Turn.EVENING)
                                                             eveningTurn = turnConfiguration;
                                                     }
-                                                    Log.i("COLOR COUNT", String.valueOf(count));
                                                     if (count == 0) {
                                                         TurnConfiguration turnConfiguration = new TurnConfiguration(finalConfigurationArrayList.get(0).getTurn()
                                                                 , Colors.listColors[which], Colors.listColors[which]);

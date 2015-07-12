@@ -1,5 +1,6 @@
 package com.naddiaz.workshift.ui.fragment;
 
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -104,6 +105,7 @@ public class CalendarFragment extends Fragment implements OnDateChangedListener,
         listViewDetail = (ListView) rootView.findViewById(R.id.listView_detailTurn);
 
         calendarView.setOnDateChangedListener(this);
+        calendarView.setSelectionColor(Color.parseColor("#FFFFFF"));
         calendarView.setOnMonthChangedListener(this);
 
 
