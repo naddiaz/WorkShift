@@ -103,24 +103,6 @@ public class Preferences {
         this.configUpdate = prefs.getInt(CONFIG_UPDATE, 0);
     }
 
-    public ArrayList<Turn> updateTurnToken(){
-        ArrayList<Turn> turns = null;
-        try {
-            turns = (ArrayList<Turn>) turnHelper.getTurnDAO().queryForAll();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        if(turns != null){
-            final SharedPreferences prefs = preferences();
-            this.read();
-            SharedPreferences.Editor editor = prefs.edit();
-            editor.putString(TURN_TOKEN, Crypto.md5(turns.toString()));
-            editor.putInt(TURN_UPDATE,turnUpdate+1);
-            editor.commit();
-        }
-        return turns;
-    }
-
     private SharedPreferences preferences(){
         return this.context.getSharedPreferences(HomeActivity.class.getSimpleName(),
                 Context.MODE_PRIVATE);

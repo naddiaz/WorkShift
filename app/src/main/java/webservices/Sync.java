@@ -25,11 +25,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import model.Change;
+import model.Comment;
+import model.Dubbing;
 import model.Turn;
+import model.helpers.ChangeHelper;
+import model.helpers.CommentHelper;
 import model.helpers.DatabaseHelper;
+import model.helpers.DubbingHelper;
 import model.helpers.TurnHelper;
 import utils.Crypto;
 import utils.Preferences;
+import utils.Token;
 
 /**
  * Created by NESTOR on 12/07/2015.
@@ -44,25 +51,33 @@ public class Sync {
 
     DatabaseHelper databaseHelper;
     TurnHelper turnHelper;
+    ChangeHelper changeHelper;
+    DubbingHelper dubbingHelper;
+    CommentHelper commentHelper;
 
     public Sync(Context context) {
         this.context = context;
         preferences = new Preferences(context);
+        databaseHelper = new DatabaseHelper(context);
     }
 
     public Sync(Context context,LinearLayout linearLayout) {
         this.context = context;
         this.linearLayout = linearLayout;
         preferences = new Preferences(context);
+        databaseHelper = new DatabaseHelper(context);
     }
 
-    public void turn(){
+    public void all(){
         final RequestQueue requestQueue = Volley.newRequestQueue(this.context);
         requestQueue.getCache().clear();
 
+        int token = new Token(context).generateTurnToken();
+        Log.i("TOKEN", String.valueOf(token));
+
         Map<String, String>  params = new HashMap<String, String>();
         params.put(Preferences.EMAIL, preferences.getEmail());
-        params.put(Preferences.TURN_TOKEN, preferences.getTurnToken());
+        params.put(Preferences.TURN_TOKEN, String.valueOf(token));
 
         CustomRequest request = new CustomRequest(Request.Method.POST, Routes.wsSyncTurns, params,
                 new Response.Listener<JSONObject>() {
@@ -71,17 +86,18 @@ public class Sync {
                         if(response.has("status")){
                             try {
                                 if(response.getBoolean("status")){
-                                    Log.i(TAG,response.toString());
+                                    Log.i(TAG, response.toString());
                                     if(linearLayout != null)
                                         linearLayout.setVisibility(View.GONE);
-                                    Intent intent = new Intent(context, HomeActivity.class);
-                                    context.startActivity(intent);
                                 }
                                 else{
                                     Log.i(TAG,response.toString());
                                     preferences.setTurnToken(response.getString("token"));
                                     preferences.save();
-                                    updateLocalDataBase(response.getString("turns"));
+                                    updateLocalTurns(response.getString("turns"));
+                                    updateLocalChanges(response.getString("changes"));
+                                    updateLocalDubbings(response.getString("dubbings"));
+                                    updateLocalComments(response.getString("comments"));
                                     if(linearLayout != null)
                                         linearLayout.setVisibility(View.GONE);
                                     Intent intent = new Intent(context, HomeActivity.class);
@@ -97,17 +113,20 @@ public class Sync {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                SuperToast.create(context, context.getString(R.string.error_login_timeout), SuperToast.Duration.LONG,
+                        Style.getStyle(Style.ORANGE, SuperToast.Animations.FLYIN)).show();
+                if(linearLayout != null)
+                    linearLayout.setVisibility(View.GONE);
             }
         });
         requestQueue.add(request);
     }
 
-    private void updateLocalDataBase(String turns) throws JSONException {
-        databaseHelper = new DatabaseHelper(context);
+    private void updateLocalTurns(String turns) throws JSONException {
         turnHelper = new TurnHelper(databaseHelper);
 
         JSONArray jsonArray = new JSONArray(turns);
-        Log.i(TAG,jsonArray.toString());
+        Log.i(TAG, jsonArray.toString());
         for(int i=0; i<jsonArray.length(); i++){
             JSONObject jsonObject = jsonArray.getJSONObject(i);
             Turn turn = new Turn();
@@ -121,6 +140,60 @@ public class Sync {
             turn.setContainComment(jsonObject.getBoolean(Turn.CONTAIN_COMMENT));
             try {
                 turnHelper.getTurnDAO().createOrUpdate(turn);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void updateLocalChanges(String changes) throws JSONException {
+        changeHelper = new ChangeHelper(databaseHelper);
+
+        JSONArray jsonArray = new JSONArray(changes);
+        Log.i(TAG, jsonArray.toString());
+        for(int i=0; i<jsonArray.length(); i++){
+            JSONObject jsonObject = jsonArray.getJSONObject(i);
+            Change change = new Change();
+            change.setDate(jsonObject.getString(Change.DATE));
+            change.setTurn(jsonObject.getInt(Change.TURN));
+            try {
+                changeHelper.getChangeDAO().createOrUpdate(change);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void updateLocalDubbings(String dubbings) throws JSONException {
+        dubbingHelper = new DubbingHelper(databaseHelper);
+
+        JSONArray jsonArray = new JSONArray(dubbings);
+        Log.i(TAG, jsonArray.toString());
+        for(int i=0; i<jsonArray.length(); i++){
+            JSONObject jsonObject = jsonArray.getJSONObject(i);
+            Dubbing dubbing = new Dubbing();
+            dubbing.setDate(jsonObject.getString(Dubbing.DATE));
+            dubbing.setTurn(jsonObject.getInt(Dubbing.TURN));
+            try {
+                dubbingHelper.getDubbingDAO().createOrUpdate(dubbing);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void updateLocalComments(String comments) throws JSONException {
+        commentHelper = new CommentHelper(databaseHelper);
+
+        JSONArray jsonArray = new JSONArray(comments);
+        Log.i(TAG, jsonArray.toString());
+        for(int i=0; i<jsonArray.length(); i++){
+            JSONObject jsonObject = jsonArray.getJSONObject(i);
+            Comment comment = new Comment();
+            comment.setDate(jsonObject.getString(Comment.DATE));
+            comment.setText(jsonObject.getString(Comment.TEXT));
+            try {
+                commentHelper.getCommentDAO().createOrUpdate(comment);
             } catch (SQLException e) {
                 e.printStackTrace();
             }

@@ -1,14 +1,12 @@
 package com.naddiaz.workshift.ui.activity;
 
-import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
-import android.widget.Toast;
+import android.widget.LinearLayout;
 
 import com.naddiaz.workshift.R;
 import com.naddiaz.workshift.ui.fragment.CalendarFragment;
@@ -20,6 +18,7 @@ import br.liveo.interfaces.OnItemClickListener;
 import br.liveo.interfaces.OnPrepareOptionsMenuLiveo;
 import br.liveo.navigationliveo.NavigationLiveo;
 import utils.Preferences;
+import webservices.Sync;
 
 public class HomeActivity extends NavigationLiveo implements OnItemClickListener {
 
@@ -45,13 +44,14 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
 
         mHelpLiveo = new HelpLiveo();
         mHelpLiveo.addSubHeader(getString(R.string.menu_subheaher_schedule));
-        mHelpLiveo.add(getString(R.string.menu_item_calendar), R.drawable.ic_action_calendar);
+        mHelpLiveo.add(getString(R.string.menu_item_calendar), R.drawable.ic_calendar);
+        mHelpLiveo.add(getString(R.string.menu_item_insert), R.drawable.ic_monthadd);
         mHelpLiveo.addSubHeader(getString(R.string.menu_subheaher_options));
-        mHelpLiveo.add(getString(R.string.menu_item_insert), R.drawable.ic_action_add);
-        mHelpLiveo.add(getString(R.string.menu_item_personalized), R.drawable.ic_action_personalize);
+        mHelpLiveo.add(getString(R.string.menu_item_update), R.drawable.ic_action_update);
+        mHelpLiveo.add(getString(R.string.menu_item_personalized), R.drawable.ic_personalized);
         mHelpLiveo.addSeparator();
 
-        with(this).startingPosition(2)
+        with(this).startingPosition(1)
                 .addAllHelpItem(mHelpLiveo.getHelp())
                 .setOnClickUser(onClickPhoto)
                 .setOnPrepareOptionsMenu(onPrepare)
@@ -65,14 +65,24 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
         Fragment mFragment;
         FragmentManager mFragmentManager = getSupportFragmentManager();
         switch (position){
-            case 3:
+            case 1:
+                mFragment = CalendarFragment.newInstance(mHelpLiveo.get(position).getName());
+                break;
+            case 2:
                 mFragment = MonthAddFragment.newInstance(mHelpLiveo.get(position).getName());
                 break;
             case 4:
+                mFragment = null;
+                LinearLayout loading = (LinearLayout) findViewById(R.id.layout_loading);
+                loading.setVisibility(View.VISIBLE);
+                new Sync(this,loading).all();
+                break;
+            case 5:
                 mFragment = PersonalizedFragment.newInstance(mHelpLiveo.get(position).getName());
                 break;
             default:
-                mFragment = CalendarFragment.newInstance(mHelpLiveo.get(position).getName());
+                Log.i("OPTION", String.valueOf(position));
+                mFragment = null;
                 break;
         }
         if (mFragment != null){

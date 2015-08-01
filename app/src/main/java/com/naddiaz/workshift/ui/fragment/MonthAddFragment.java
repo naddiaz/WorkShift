@@ -20,12 +20,13 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.naddiaz.workshift.R;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import model.Turn;
 import model.helpers.DatabaseHelper;
 import model.helpers.TurnHelper;
-import webservices.TurnsUpdateServer;
+import webservices.Actions;
 
 /**
  * Created by NESTOR on 21/06/2015.
@@ -162,6 +163,7 @@ public class MonthAddFragment extends Fragment {
             Log.i(MONTH_ADD_FRAGMENT,sequence);
             int year = selectedYear;
             int month = selectedMonth;
+            ArrayList<Turn> turnArrayList = new ArrayList<>();
             for(int i=0; i<sequence.length(); i++){
                 try {
                     Turn turn = null;
@@ -182,18 +184,20 @@ public class MonthAddFragment extends Fragment {
                     if (turn != null) {
                         turn.setTurnActual(turn.getTurnOriginal());
                         turnHelper.getTurnDAO().createOrUpdate(turn);
+                        turnArrayList.add(turn);
                     }
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
             }
+            new Actions(getActivity()).addMonth(turnArrayList);
             View v = getActivity().getCurrentFocus();
             if (view != null) {
                 InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(
                         Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
             }
-            new TurnsUpdateServer(getActivity()).execute();
+
             FragmentManager mFragmentManager = getActivity().getSupportFragmentManager();
             mFragmentManager.beginTransaction()
                     .setCustomAnimations(R.anim.slide_side_left, R.anim.slide_side_rigth)

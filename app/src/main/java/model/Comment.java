@@ -30,10 +30,10 @@ public class Comment {
 
     @Override
     public String toString() {
-        return "Comment{" +
-                "id=" + id +
-                ", date='" + date + '\'' +
-                ", text='" + text + '\'' +
+        return "{" +
+                "\"id\":" + id +
+                ",\"text\":\"" + text + '\"' +
+                ",\"date\":\"" + date + '\"' +
                 '}';
     }
 

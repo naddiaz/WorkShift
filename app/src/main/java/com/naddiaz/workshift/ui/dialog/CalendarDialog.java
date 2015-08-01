@@ -1,7 +1,6 @@
 package com.naddiaz.workshift.ui.dialog;
 
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
@@ -23,6 +22,7 @@ import model.helpers.CommentHelper;
 import model.helpers.DatabaseHelper;
 import model.helpers.DubbingHelper;
 import model.helpers.TurnHelper;
+import webservices.Actions;
 
 /**
  * Created by NESTOR on 20/06/2015.
@@ -95,6 +95,7 @@ public class CalendarDialog {
                                             try {
                                                 changeHelper.getChangeDAO().createOrUpdate(change);
                                                 turnHelper.getTurnDAO().createOrUpdate(newTurn);
+                                                new Actions(fragmentActivity).addChange(newTurn, change);
                                                 fragmentActivity.getSupportFragmentManager()
                                                         .beginTransaction()
                                                         .replace(R.id.container, new CalendarFragment())
@@ -145,6 +146,7 @@ public class CalendarDialog {
                                               newTurn.setIsDubbing(false);
                                               newTurn.setTurnActual(turn.getTurnOriginal());
                                               turnHelper.getTurnDAO().createOrUpdate(newTurn);
+                                              new Actions(fragmentActivity).delChange(newTurn, change, dubbing);
                                           } catch (SQLException e) {
                                               e.printStackTrace();
                                           }
@@ -209,6 +211,7 @@ public class CalendarDialog {
                                             try {
                                                 dubbingHelper.getDubbingDAO().createOrUpdate(dubbing);
                                                 turnHelper.getTurnDAO().createOrUpdate(newTurn);
+                                                new Actions(fragmentActivity).addDubbing(newTurn,dubbing);
                                                 fragmentActivity.getSupportFragmentManager()
                                                         .beginTransaction()
                                                         .replace(R.id.container, new CalendarFragment())
@@ -266,6 +269,7 @@ public class CalendarDialog {
                                                   newTurn.setTurnActual(turn.getTurnOriginal());
                                               }
                                               turnHelper.getTurnDAO().createOrUpdate(newTurn);
+                                              new Actions(fragmentActivity).delDubbing(newTurn, dubbing);
                                           } catch (SQLException e) {
                                               e.printStackTrace();
                                           }
@@ -314,6 +318,7 @@ public class CalendarDialog {
                                 try {
                                     turnHelper.getTurnDAO().createOrUpdate(turn);
                                     commentHelper.getCommentDAO().create(comment);
+                                    new Actions(fragmentActivity).addComment(turn,comment);
                                 } catch (SQLException e) {
                                     e.printStackTrace();
                                 }
@@ -366,6 +371,7 @@ public class CalendarDialog {
                                                       turn.setContainComment(false);
                                                       turnHelper.getTurnDAO().createOrUpdate(turn);
                                                   }
+                                                  new Actions(fragmentActivity).delComment(turn,cmt);
                                               }
                                           } catch (SQLException e) {
                                               e.printStackTrace();

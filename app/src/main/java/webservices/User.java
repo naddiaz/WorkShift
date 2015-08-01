@@ -26,6 +26,7 @@ import java.util.Map;
 
 import utils.Crypto;
 import utils.Preferences;
+import utils.Token;
 
 /**
  * Created by NESTOR on 12/07/2015.
@@ -63,7 +64,7 @@ public class User {
                                     preferences.setName(response.getString("name"));
                                     preferences.setLastName(response.getString("lastName"));
                                     preferences.save();
-                                    new Sync(context,linearLayout).turn();
+                                    new Sync(context,linearLayout).all();
                                 }
                                 else{
                                     linearLayout.setVisibility(View.GONE);

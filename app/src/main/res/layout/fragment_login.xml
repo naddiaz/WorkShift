@@ -25,10 +25,11 @@
 
             <ImageView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="144dp"
                 android:id="@+id/imageView"
                 android:layout_gravity="center_horizontal"
-                android:src="@drawable/ic_launcher" />
+                android:src="@drawable/ic_launcher"
+                android:layout_weight="0" />
 
             <EditText
                 android:layout_width="match_parent"
@@ -74,28 +75,5 @@
         </LinearLayout>
     </ScrollView>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center_vertical|center_horizontal"
-        android:id="@+id/layout_loading"
-        android:orientation="vertical"
-        android:background="#B4000000"
-        android:visibility="gone"
-        android:clickable="true">
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/loading"
-            android:id="@+id/textView2"
-            android:gravity="center"
-            android:textColor="@color/md_white" />
-
-        <pl.droidsonroids.gif.GifImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/preloader"
-            android:id="@+id/preloading" />
-    </LinearLayout>
+    <include layout="@layout/include_loading"/>
 </RelativeLayout>

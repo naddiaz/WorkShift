@@ -156,6 +156,7 @@
     <string name="loading">Cargando</string>
     <string name="error_login_password">El email y la contraseña no coinciden</string>
     <string name="error_login_timeout">Ha habido un error en la conexión, por favor inténtelo de nuevo</string>
+    <string name="menu_item_update">Sincronizar</string>
 
 
 </resources>

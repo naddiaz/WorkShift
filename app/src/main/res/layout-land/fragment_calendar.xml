@@ -1,6 +1,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:layout="http://schemas.android.com/apk/res-auto"
     tools:context="com.naddiaz.workshift.ui.activity.HomeActivity"
     android:id="@+id/container">
 
@@ -91,5 +93,8 @@
         android:layout_width="fill_parent"
         android:id="@+id/fam_options"
         android:layout_alignBottom="@+id/top_container" />
+
+    <include layout="@layout/include_loading"/>
+
 </RelativeLayout>
 

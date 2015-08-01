@@ -33,9 +33,9 @@ public class Dubbing {
 
     @Override
     public String toString() {
-        return "Turn{" +
-                "turn=" + turn +
-                ", date='" + date + '\'' +
+        return "{" +
+                "\"turn\":" + turn +
+                ",\"date\":\"" + date + '\"' +
                 '}';
     }
 
