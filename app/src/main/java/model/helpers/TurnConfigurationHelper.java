@@ -31,7 +31,7 @@ public class TurnConfigurationHelper {
         TurnConfiguration turnConfiguration = new TurnConfiguration();
 
         turnConfiguration.setTurn(Turn.MORNING);
-        turnConfiguration.setColorStart(Colors.BROWN);
+        turnConfiguration.setColorStart(Colors.TEAL);
         turnConfiguration.setColorEnd(Colors.TEAL);
         this.getTurnConfigurationDAO().create(turnConfiguration);
 

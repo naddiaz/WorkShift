@@ -48,6 +48,7 @@ public class Sync {
     private Context context;
     Preferences preferences;
     LinearLayout linearLayout;
+    Boolean isLogin;
 
     DatabaseHelper databaseHelper;
     TurnHelper turnHelper;
@@ -55,17 +56,19 @@ public class Sync {
     DubbingHelper dubbingHelper;
     CommentHelper commentHelper;
 
-    public Sync(Context context) {
+    public Sync(Context context, Boolean isLogin) {
         this.context = context;
         preferences = new Preferences(context);
         databaseHelper = new DatabaseHelper(context);
+        this.isLogin = isLogin;
     }
 
-    public Sync(Context context,LinearLayout linearLayout) {
+    public Sync(Context context,LinearLayout linearLayout, Boolean isLogin) {
         this.context = context;
         this.linearLayout = linearLayout;
         preferences = new Preferences(context);
         databaseHelper = new DatabaseHelper(context);
+        this.isLogin = isLogin;
     }
 
     public void all(){
@@ -89,6 +92,10 @@ public class Sync {
                                     Log.i(TAG, response.toString());
                                     if(linearLayout != null)
                                         linearLayout.setVisibility(View.GONE);
+                                    if(isLogin){
+                                        Intent intent = new Intent(context,HomeActivity.class);
+                                        context.startActivity(intent);
+                                    }
                                 }
                                 else{
                                     Log.i(TAG,response.toString());
@@ -100,8 +107,10 @@ public class Sync {
                                     updateLocalComments(response.getString("comments"));
                                     if(linearLayout != null)
                                         linearLayout.setVisibility(View.GONE);
-                                    Intent intent = new Intent(context, HomeActivity.class);
-                                    context.startActivity(intent);
+                                    if(isLogin){
+                                        Intent intent = new Intent(context,HomeActivity.class);
+                                        context.startActivity(intent);
+                                    }
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();

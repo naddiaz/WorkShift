@@ -1,11 +1,15 @@
 package com.naddiaz.workshift.ui.activity;
 
+import android.annotation.TargetApi;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
 
 import com.naddiaz.workshift.R;
@@ -75,7 +79,7 @@ public class HomeActivity extends NavigationLiveo implements OnItemClickListener
                 mFragment = null;
                 LinearLayout loading = (LinearLayout) findViewById(R.id.layout_loading);
                 loading.setVisibility(View.VISIBLE);
-                new Sync(this,loading).all();
+                new Sync(this,loading,false).all();
                 break;
             case 5:
                 mFragment = PersonalizedFragment.newInstance(mHelpLiveo.get(position).getName());

@@ -64,7 +64,7 @@ public class User {
                                     preferences.setName(response.getString("name"));
                                     preferences.setLastName(response.getString("lastName"));
                                     preferences.save();
-                                    new Sync(context,linearLayout).all();
+                                    new Sync(context,linearLayout,true).all();
                                 }
                                 else{
                                     linearLayout.setVisibility(View.GONE);

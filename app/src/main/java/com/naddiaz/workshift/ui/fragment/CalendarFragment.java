@@ -59,6 +59,8 @@ public class CalendarFragment extends Fragment implements OnDateChangedListener,
     private static final String SELECTED_CALENDAR_MONTH = "selected_calendar_month";
     private static final String SELECTED_CALENDAR_YEAR = "selected_calendar_year";
 
+    CalendarFragment calendarFragment;
+
     private ArrayList<CalendarDay> calendarDayArrayList = new ArrayList<>();
     ArrayList<DetailItem> detailItemArrayList = new ArrayList<>();
     DetailListAdapter detailListAdapter;
@@ -69,6 +71,8 @@ public class CalendarFragment extends Fragment implements OnDateChangedListener,
     ListView listViewDetail;
     TextView textViewLoadData;
     TextView textViewLoadDetail;
+
+    Decorator decorator;
 
     public static DatabaseHelper databaseHelper;
     public static TurnConfigurationHelper turnConfigurationHelper;
@@ -88,6 +92,8 @@ public class CalendarFragment extends Fragment implements OnDateChangedListener,
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        calendarFragment = this;
         View rootView = inflater.inflate(R.layout.fragment_calendar, container, false);
         RelativeLayout relativeLayoutContainer = (RelativeLayout) rootView.findViewById(R.id.container);
         relativeLayoutContainer.setOnClickListener(new View.OnClickListener() {
@@ -105,7 +111,7 @@ public class CalendarFragment extends Fragment implements OnDateChangedListener,
         listViewDetail = (ListView) rootView.findViewById(R.id.listView_detailTurn);
 
         calendarView.setOnDateChangedListener(this);
-        calendarView.setSelectionColor(Color.parseColor("#FFFFFF"));
+        calendarView.setSelectionColor(Color.parseColor("#CCCCCC"));
         calendarView.setOnMonthChangedListener(this);
 
 
@@ -149,7 +155,7 @@ public class CalendarFragment extends Fragment implements OnDateChangedListener,
         textViewDateBox.setText(calendarView.getSelectedDate().getDay() + " "
                 + getResources().getStringArray(R.array.full_months)[calendarView.getSelectedDate().getMonth()] + " "
                 + calendarView.getSelectedDate().getYear());
-        detailListAdapter = new DetailListAdapter(getActivity(), detailItemArrayList, calendarView.getSelectedDate());
+        detailListAdapter = new DetailListAdapter(getActivity(), detailItemArrayList, calendarView.getSelectedDate(), calendarFragment, calendarView);
         listViewDetail.setAdapter(detailListAdapter);
 
         loadActualMonth(calendarView.getCurrentDate());
@@ -321,7 +327,14 @@ public class CalendarFragment extends Fragment implements OnDateChangedListener,
         }
     }
 
-    private void loadActualDay(CalendarDay calendarDay){
+    public void loadActualDay(CalendarDay calendarDay){
+        if(decorator != null)
+            calendarView.removeDecorator(decorator);
+        String dateStr = calendarDay.getYear() + ".";
+        dateStr += (calendarDay.getMonth() + 1) + ".";
+        dateStr += calendarDay.getDay();
+        decorator = new Decorator(dateStr).generateDotSpan("#FFFFFF");
+        calendarView.addDecorator(decorator);
         new DetailLoader(calendarDay)
                 .executeOnExecutor(Executors.newSingleThreadExecutor());
     }
@@ -413,7 +426,7 @@ public class CalendarFragment extends Fragment implements OnDateChangedListener,
         @Override
         protected void onPostExecute(Turn turn) {
             super.onPostExecute(turn);
-            detailListAdapter = new DetailListAdapter(getActivity(), this.detailItemArrayList, this.calendarDay);
+            detailListAdapter = new DetailListAdapter(getActivity(), this.detailItemArrayList, this.calendarDay, calendarFragment, calendarView);
             listViewDetail.setAdapter(detailListAdapter);
             detailListAdapter.notifyDataSetChanged();
             //textViewLoadDetail.setVisibility(View.GONE);
@@ -427,7 +440,7 @@ public class CalendarFragment extends Fragment implements OnDateChangedListener,
             @Override
             public void onClick(View v) {
                 floatingActionMenu.close(true);
-                new CalendarDialog(getActivity(),calendarView).showChangeTurnDialog();
+                new CalendarDialog(getActivity(),calendarView, calendarFragment).showChangeTurnDialog();
             }
         });
 
@@ -437,7 +450,7 @@ public class CalendarFragment extends Fragment implements OnDateChangedListener,
             @Override
             public void onClick(View v) {
                 floatingActionMenu.close(true);
-                new CalendarDialog(getActivity(), calendarView).showDoubleTurnDialog();
+                new CalendarDialog(getActivity(), calendarView, calendarFragment).showDoubleTurnDialog();
             }
         });
 
@@ -446,7 +459,7 @@ public class CalendarFragment extends Fragment implements OnDateChangedListener,
             @Override
             public void onClick(View v) {
                 floatingActionMenu.close(true);
-                new CalendarDialog(getActivity(), calendarView).showCommentDialog();
+                new CalendarDialog(getActivity(), calendarView, calendarFragment).showCommentDialog();
             }
         });
     }

@@ -6,21 +6,25 @@ import android.widget.EditText;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.naddiaz.workshift.R;
+import com.naddiaz.workshift.ui.decorators.Decorator;
 import com.naddiaz.workshift.ui.fragment.CalendarFragment;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import model.Change;
 import model.Comment;
 import model.Dubbing;
 import model.Turn;
+import model.TurnConfiguration;
 import model.helpers.ChangeHelper;
 import model.helpers.CommentHelper;
 import model.helpers.DatabaseHelper;
 import model.helpers.DubbingHelper;
+import model.helpers.TurnConfigurationHelper;
 import model.helpers.TurnHelper;
 import webservices.Actions;
 
@@ -30,29 +34,35 @@ import webservices.Actions;
 public class CalendarDialog {
     FragmentActivity fragmentActivity;
     MaterialCalendarView calendarView;
+    CalendarFragment calendarFragment;
 
     EditText editTextAddComment;
 
     public static DatabaseHelper databaseHelper;
     public static TurnHelper turnHelper;
+    public static TurnConfigurationHelper turnConfigurationHelper;
     public static ChangeHelper changeHelper;
     public static DubbingHelper dubbingHelper;
     public static CommentHelper commentHelper;
 
-    public CalendarDialog(FragmentActivity fragmentActivity, MaterialCalendarView calendarView) {
+    public CalendarDialog(FragmentActivity fragmentActivity, MaterialCalendarView calendarView, CalendarFragment calendarFragment) {
         this.fragmentActivity = fragmentActivity;
+        this.calendarFragment = calendarFragment;
         this.calendarView = calendarView;
         databaseHelper = new DatabaseHelper(fragmentActivity);
         turnHelper = new TurnHelper(databaseHelper);
+        turnConfigurationHelper = new TurnConfigurationHelper(databaseHelper);
         changeHelper = new ChangeHelper(databaseHelper);
         dubbingHelper = new DubbingHelper(databaseHelper);
         commentHelper = new CommentHelper(databaseHelper);
     }
 
-    public CalendarDialog(FragmentActivity fragmentActivity) {
+    public CalendarDialog(FragmentActivity fragmentActivity, CalendarFragment calendarFragment) {
         this.fragmentActivity = fragmentActivity;
+        this.calendarFragment = calendarFragment;
         databaseHelper = new DatabaseHelper(fragmentActivity);
         turnHelper = new TurnHelper(databaseHelper);
+        turnConfigurationHelper = new TurnConfigurationHelper(databaseHelper);
         changeHelper = new ChangeHelper(databaseHelper);
         dubbingHelper = new DubbingHelper(databaseHelper);
         commentHelper = new CommentHelper(databaseHelper);
@@ -79,6 +89,7 @@ public class CalendarDialog {
             else{
                 final Turn turn = turnArrayList.get(0);
 
+                final String finalDateStr = dateStr;
                 new MaterialDialog.Builder(fragmentActivity)
                         .title(fragmentActivity.getString(R.string.change_turn) + ": " + fragmentActivity.getResources().getString(Turn.nameFromInt.get(turn.getTurnOriginal())))
                         .items(R.array.turns_names_simple)
@@ -95,11 +106,15 @@ public class CalendarDialog {
                                             try {
                                                 changeHelper.getChangeDAO().createOrUpdate(change);
                                                 turnHelper.getTurnDAO().createOrUpdate(newTurn);
+                                                ArrayList<TurnConfiguration> turnConfigs = (ArrayList<TurnConfiguration>) turnConfigurationHelper.getTurnConfigurationDAO()
+                                                        .queryBuilder()
+                                                        .where()
+                                                        .eq(TurnConfiguration.TURN, newTurn.getTurnActual())
+                                                        .query();
+                                                TurnConfiguration config = turnConfigs.get(0);
+                                                calendarView.addDecorator(new Decorator(finalDateStr).generateBackgroundDrawable(config.getColorStart(),config.getColorEnd()));
+                                                calendarFragment.loadActualDay(calendarView.getSelectedDate());
                                                 new Actions(fragmentActivity).addChange(newTurn, change);
-                                                fragmentActivity.getSupportFragmentManager()
-                                                        .beginTransaction()
-                                                        .replace(R.id.container, new CalendarFragment())
-                                                        .commit();
                                             } catch (SQLException e) {
                                                 e.printStackTrace();
                                             }
@@ -146,14 +161,19 @@ public class CalendarDialog {
                                               newTurn.setIsDubbing(false);
                                               newTurn.setTurnActual(turn.getTurnOriginal());
                                               turnHelper.getTurnDAO().createOrUpdate(newTurn);
+                                              ArrayList<TurnConfiguration> turnConfigs = (ArrayList<TurnConfiguration>) turnConfigurationHelper.getTurnConfigurationDAO()
+                                                      .queryBuilder()
+                                                      .where()
+                                                      .eq(TurnConfiguration.TURN, newTurn.getTurnActual())
+                                                      .query();
+                                              TurnConfiguration config = turnConfigs.get(0);
+                                              calendarView.addDecorator(new Decorator(dateStr).generateBackgroundDrawable(config.getColorStart(), config.getColorEnd()));
+                                              calendarFragment.loadActualDay(calendarView.getSelectedDate());
                                               new Actions(fragmentActivity).delChange(newTurn, change, dubbing);
                                           } catch (SQLException e) {
                                               e.printStackTrace();
                                           }
-                                          fragmentActivity.getSupportFragmentManager()
-                                                  .beginTransaction()
-                                                  .replace(R.id.container, new CalendarFragment())
-                                                  .commit();
+
                                       }
                                   }
                         )
@@ -195,6 +215,7 @@ public class CalendarDialog {
             else{
                 final Turn turn = turnArrayList.get(0);
 
+                final String finalDateStr = dateStr;
                 new MaterialDialog.Builder(fragmentActivity)
                         .title(fragmentActivity.getString(R.string.double_turn) + ": " + fragmentActivity.getResources().getString(Turn.nameFromInt.get(turn.getTurnOriginal())))
                         .items(R.array.turns_names_double)
@@ -212,10 +233,14 @@ public class CalendarDialog {
                                                 dubbingHelper.getDubbingDAO().createOrUpdate(dubbing);
                                                 turnHelper.getTurnDAO().createOrUpdate(newTurn);
                                                 new Actions(fragmentActivity).addDubbing(newTurn,dubbing);
-                                                fragmentActivity.getSupportFragmentManager()
-                                                        .beginTransaction()
-                                                        .replace(R.id.container, new CalendarFragment())
-                                                        .commit();
+                                                ArrayList<TurnConfiguration> turnConfigs = (ArrayList<TurnConfiguration>) turnConfigurationHelper.getTurnConfigurationDAO()
+                                                        .queryBuilder()
+                                                        .where()
+                                                        .eq(TurnConfiguration.TURN, newTurn.getTurnActual())
+                                                        .query();
+                                                TurnConfiguration config = turnConfigs.get(0);
+                                                calendarView.addDecorator(new Decorator(finalDateStr).generateBackgroundDrawable(config.getColorStart(), config.getColorEnd()));
+                                                calendarFragment.loadActualDay(calendarView.getSelectedDate());
                                             } catch (SQLException e) {
                                                 e.printStackTrace();
                                             }
@@ -269,14 +294,18 @@ public class CalendarDialog {
                                                   newTurn.setTurnActual(turn.getTurnOriginal());
                                               }
                                               turnHelper.getTurnDAO().createOrUpdate(newTurn);
+                                              ArrayList<TurnConfiguration> turnConfigs = (ArrayList<TurnConfiguration>) turnConfigurationHelper.getTurnConfigurationDAO()
+                                                      .queryBuilder()
+                                                      .where()
+                                                      .eq(TurnConfiguration.TURN, newTurn.getTurnActual())
+                                                      .query();
+                                              TurnConfiguration config = turnConfigs.get(0);
+                                              calendarView.addDecorator(new Decorator(dateStr).generateBackgroundDrawable(config.getColorStart(), config.getColorEnd()));
+                                              calendarFragment.loadActualDay(calendarView.getSelectedDate());
                                               new Actions(fragmentActivity).delDubbing(newTurn, dubbing);
                                           } catch (SQLException e) {
                                               e.printStackTrace();
                                           }
-                                          fragmentActivity.getSupportFragmentManager()
-                                                  .beginTransaction()
-                                                  .replace(R.id.container, new CalendarFragment())
-                                                  .commit();
                                       }
                                   }
                         )
@@ -318,14 +347,11 @@ public class CalendarDialog {
                                 try {
                                     turnHelper.getTurnDAO().createOrUpdate(turn);
                                     commentHelper.getCommentDAO().create(comment);
+                                    calendarFragment.loadActualDay(calendarView.getSelectedDate());
                                     new Actions(fragmentActivity).addComment(turn,comment);
                                 } catch (SQLException e) {
                                     e.printStackTrace();
                                 }
-                                fragmentActivity.getSupportFragmentManager()
-                                        .beginTransaction()
-                                        .replace(R.id.container, new CalendarFragment())
-                                        .commit();
                             }
                         }
                     }).build();
@@ -371,15 +397,12 @@ public class CalendarDialog {
                                                       turn.setContainComment(false);
                                                       turnHelper.getTurnDAO().createOrUpdate(turn);
                                                   }
+                                                  calendarFragment.loadActualDay(calendarView.getSelectedDate());
                                                   new Actions(fragmentActivity).delComment(turn,cmt);
                                               }
                                           } catch (SQLException e) {
                                               e.printStackTrace();
                                           }
-                                          fragmentActivity.getSupportFragmentManager()
-                                                  .beginTransaction()
-                                                  .replace(R.id.container, new CalendarFragment())
-                                                  .commit();
                                       }
                                   }
                         )

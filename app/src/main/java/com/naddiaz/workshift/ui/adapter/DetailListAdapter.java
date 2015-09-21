@@ -5,13 +5,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CalendarView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.naddiaz.workshift.R;
 import com.naddiaz.workshift.ui.dialog.CalendarDialog;
+import com.naddiaz.workshift.ui.fragment.CalendarFragment;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -31,6 +34,8 @@ public class DetailListAdapter extends BaseAdapter {
     private FragmentActivity fragmentActivity;
     private ArrayList<DetailItem> detailItemArrayList;
     private CalendarDay selectedDay;
+    private CalendarFragment calendarFragment;
+    private MaterialCalendarView calendarView;
 
     public static DatabaseHelper databaseHelper;
     public static TurnHelper turnHelper;
@@ -38,10 +43,12 @@ public class DetailListAdapter extends BaseAdapter {
     public static DubbingHelper dubbingHelper;
     public static CommentHelper commentHelper;
 
-    public DetailListAdapter(FragmentActivity fragmentActivity, ArrayList<DetailItem> detailItemArrayList, CalendarDay selectedDay) {
+    public DetailListAdapter(FragmentActivity fragmentActivity, ArrayList<DetailItem> detailItemArrayList, CalendarDay selectedDay, CalendarFragment calendarFragment, MaterialCalendarView calendarView) {
         this.fragmentActivity = fragmentActivity;
         this.detailItemArrayList = detailItemArrayList;
         this.selectedDay = selectedDay;
+        this.calendarFragment = calendarFragment;
+        this.calendarView = calendarView;
 
         databaseHelper = new DatabaseHelper(fragmentActivity);
         turnHelper = new TurnHelper(databaseHelper);
@@ -87,7 +94,7 @@ public class DetailListAdapter extends BaseAdapter {
             linearLayoutContainer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    new CalendarDialog(fragmentActivity).deleteChangeDialog(dateStr);
+                    new CalendarDialog(fragmentActivity, calendarView, calendarFragment).deleteChangeDialog(dateStr);
                 }
             });
         }
@@ -95,7 +102,7 @@ public class DetailListAdapter extends BaseAdapter {
             linearLayoutContainer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    new CalendarDialog(fragmentActivity).deleteDoubleDialog(dateStr);
+                    new CalendarDialog(fragmentActivity, calendarView, calendarFragment).deleteDoubleDialog(dateStr);
                 }
             });
         }
@@ -103,7 +110,7 @@ public class DetailListAdapter extends BaseAdapter {
             linearLayoutContainer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    new CalendarDialog(fragmentActivity).deleteCommentDialog(dateStr, detailItem.getTitle());
+                    new CalendarDialog(fragmentActivity, calendarView, calendarFragment).deleteCommentDialog(dateStr, detailItem.getTitle());
                 }
             });
         }

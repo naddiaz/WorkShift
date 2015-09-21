@@ -29,9 +29,11 @@ public class Decorator implements DayViewDecorator {
     private ArrayList<Date> dateArrayList;
 
     public Decorator(String date) {
+        dateArrayList = new ArrayList<>();
         DateFormat format = new SimpleDateFormat("yyyy.MM.dd");
         try {
             this.date = format.parse(date);
+            dateArrayList.add(this.date);
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -57,8 +59,8 @@ public class Decorator implements DayViewDecorator {
     public Decorator generateBackgroundDrawable(String hexColorStart, String hexColorEnd) {
         final int r = 5;
         final float[] outerR = new float[] {r, r, r, r, r, r, r, r};
-        final int color = Color.parseColor("#B3" + hexColorStart);
-        final int colorEnd = (hexColorEnd == null) ? color : Color.parseColor("#B3" + hexColorEnd);
+        final int color = Color.parseColor("#" + hexColorStart);
+        final int colorEnd = (hexColorEnd == null) ? color : Color.parseColor("#" + hexColorEnd);
 
         RoundRectShape rr = new RoundRectShape(outerR, null, null);
 
@@ -73,8 +75,8 @@ public class Decorator implements DayViewDecorator {
     }
 
     public Decorator generateDotSpan(String hexColor) {
-        final int color = Color.parseColor("#" + hexColor);
-        this.dotSpan = new DotSpan(4,color);
+        final int color = Color.parseColor(hexColor);
+        this.dotSpan = new DotSpan(20,color);
         return this;
     }
 }
